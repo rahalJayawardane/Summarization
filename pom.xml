@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>pdfReader</groupId>
+    <artifactId>pdfReader</artifactId>
+    <version>1.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>1.8.13</version>
+        </dependency>
+        <dependency>
+            <groupId>com.asprise.ocr</groupId>
+            <artifactId>java-ocr-api</artifactId>
+            <version>[15,)</version>
+        </dependency>
+        <dependency>
+            <groupId>com.devops4j.io</groupId>
+            <artifactId>devops4j-io</artifactId>
+            <version>0.0.1-alpha</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>
