@@ -5,35 +5,109 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.security.Key;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class pdfReader {
 
+    private static List<String> datesKeywords = new ArrayList<String>();
+    private static List<String> partKeywords = new ArrayList<String>();
+    private static List<String> sectionKeywords = new ArrayList<String>();
+    private static List<String> actKeywords = new ArrayList<String>();
+    private static List<String> publicationKeywords = new ArrayList<String>();
+    private static List<String> typeKeywords = new ArrayList<String>();
+
     public static void main(String[] args) throws IOException {
 
+        addKeywords();
         String fileName = "/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/2197-19_S.pdf";
         method(fileName);
-//        System.out.println(convertText2("I IV"));
     }
 
-    private static void generateHTMLFromPDF(String filename) throws IOException {
+    private static void addDateKeywords() {
+        List<String> keywords = new ArrayList<String>(Arrays.asList("මස","වැනි"));
+        List<String> months = new ArrayList<String>(Arrays.asList("ජනවාරි","පෙබරවාරි","මාර්තු","අප්\u200Dරියෙල්","මැයි","ජූනි",
+                "ජූලි","අගෝස්තු","සැප්තැම්බර්","ඔක්තෝබර්","නොවැම්බර්","දෙසැම්බර්"));
+        List<String> days = new ArrayList<String>(Arrays.asList("සඳුදා","අඟහරුවාදා","බදාදා","බ්\u200Dරහස්පතින්දා","සිකුරාදා",
+                "සෙනසුරාදා","ඉරිදා"));
 
-        PDDocument pdf = PDDocument.load(new File(filename));
-        Writer output = new PrintWriter("src/output/pdf.html", "utf-8");
-//        new PDFDomTree().writeText(pdf, output);
+        datesKeywords.addAll(keywords);
+        datesKeywords.addAll(months);
+        datesKeywords.addAll(days);
+    }
 
-        output.close();
+    private static void addKeywords() {
+
+        partKeywords = new ArrayList<String>(Arrays.asList("වැනි","කොටසථ"));
+        sectionKeywords = new ArrayList<String>(Arrays.asList("වැනි","ඡෙදය"));
+        typeKeywords = new ArrayList<String>(Arrays.asList("සාමාන්\u200Dය"));
+        actKeywords = new ArrayList<String>(Arrays.asList("අංක","දරන", "පනත"));
+        publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන"));
+        addDateKeywords();
     }
 
     private static void method(String filename) throws IOException {
 
+        List<String> lines = new ArrayList<String>();
         PDDocument document = PDDocument.load(new File(filename));
         if (!document.isEncrypted()) {
             PDFTextStripper stripper = new PDFTextStripper("ISO-15924");
             String text = stripper.getText(document);
+            text = text.trim();
             text = convertText(text);
-            System.out.println("Text:" + text);
+            lines = format(text);
         }
+
         document.close();
+        String date = selectedLine(lines, datesKeywords);
+        String act = selectedLine(lines, actKeywords);
+        String news = selectedLine(lines, publicationKeywords);
+        String part = selectedLine(lines, partKeywords);
+        String section = selectedLine(lines, sectionKeywords);
+        String type = selectedLine(lines, typeKeywords);
+
+        System.out.println(date);
+        System.out.println(act);
+        System.out.println(news);
+        System.out.println(part + " - " + section + " - " + type);
+    }
+
+    private static List<String> format(String text) {
+
+        String[] allWords = text.split("\n");
+        List<String> lines = new ArrayList<String>();
+
+        for (int i = 0; i < allWords.length; i++) {
+            if (allWords[i].trim().length() > 0) {
+                String[] tokenized = allWords[i].trim().split("-");
+                for (int j = 0; j < tokenized.length; j++) {
+                    lines.add(tokenized[j].trim());
+                }
+            }
+        }
+        return lines;
+    }
+
+    private static String selectedLine(List<String> lines, List<String> keywords) {
+        HashMap<Integer, Integer> scoredLine = new HashMap<Integer, Integer>();
+        for (int i = 0; i < lines.size(); i++) {
+            int score = 0;
+            String[] selecteLineWords = lines.get(i).split(" ");
+            for (String word: selecteLineWords) {
+                if(keywords.contains(word)) {
+                    score++;
+                }
+            }
+            scoredLine.put(i, score);
+        }
+        Integer key = Collections.max(scoredLine.entrySet(), Map.Entry.comparingByValue()).getKey();
+        return lines.get(key);
+
     }
 
 
@@ -528,11 +602,7 @@ public class pdfReader {
         text = text.replace("ð", "දි");
         text = text.replace("\"", ",");
         text = text.replace("¿", "ළු");
-
-
-
         return text;
-
     }
 }
 
