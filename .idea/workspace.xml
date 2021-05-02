@@ -208,8 +208,12 @@
       <change afterPath="$PROJECT_DIR$/../../my_ob/test/test.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../my_ob/testing/testing.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../.idea/my_workspace.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/pdfReader.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SamplePDFs/1.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SamplePDFs/2.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SamplePDFs/3.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SamplePDFs/4.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SamplePDFs/5.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SamplePDFs/6.pdf" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../public/.idea/public.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../public/axis/test/test.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../public/axis/untitled/untitled.iml" afterDir="false" />
@@ -345,14 +349,9 @@
       <change beforePath="$PROJECT_DIR$/../../../setups/OB/Pre-Pack/client-virtusaau-npbs/AuthSmsOTP/component/authenticator/target/smsotp.jsp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../setups/OB/Pre-Pack/client-virtusaau-npbs/AuthSmsOTP/feature/target/org.wso2.carbon.extension.identity.authenticator.smsotp.feature-3.0.4.zip" beforeDir="false" afterPath="$PROJECT_DIR$/../../../setups/OB/Pre-Pack/client-virtusaau-npbs/AuthSmsOTP/feature/target/org.wso2.carbon.extension.identity.authenticator.smsotp.feature-3.0.4.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../setups/OB/Pre-Pack/client-virtusaau-npbs/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../setups/OB/Pre-Pack/client-virtusaau-npbs/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/OCR.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SamplePDFs/2197-19_S.pdf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pdfReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pdfReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/OCR.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/pdfReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pdfReader.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -567,7 +566,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/pdfReader.java</url>
-          <line>59</line>
+          <line>76</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

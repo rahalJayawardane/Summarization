@@ -21,12 +21,28 @@ public class pdfReader {
     private static List<String> actKeywords = new ArrayList<String>();
     private static List<String> publicationKeywords = new ArrayList<String>();
     private static List<String> typeKeywords = new ArrayList<String>();
+    private static List<String> titleKeywords = new ArrayList<String>();
 
     public static void main(String[] args) throws IOException {
 
         addKeywords();
-        String fileName = "/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/2197-19_S.pdf";
-        method(fileName);
+
+        List<String> files = new ArrayList<>();
+        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/1.pdf");
+        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/2.pdf");
+        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/3.pdf");
+        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/4.pdf");
+        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/5.pdf");
+        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/6.pdf");
+
+        int i =1;
+        for (String file:files) {
+            System.out.println("------------------ File "+ i +"------------------------");
+            method(file);
+            System.out.println("------------------------------------------");
+            i++;
+        }
+
     }
 
     private static void addDateKeywords() {
@@ -43,11 +59,12 @@ public class pdfReader {
 
     private static void addKeywords() {
 
-        partKeywords = new ArrayList<String>(Arrays.asList("වැනි","කොටසථ"));
-        sectionKeywords = new ArrayList<String>(Arrays.asList("වැනි","ඡෙදය"));
+        partKeywords = new ArrayList<String>(Arrays.asList("වැනි","කොටස", "කොටසථ"));
+        sectionKeywords = new ArrayList<String>(Arrays.asList("වැනි","ඡෙදය", "පළාත්", "පාලනය"));
         typeKeywords = new ArrayList<String>(Arrays.asList("සාමාන්\u200Dය"));
         actKeywords = new ArrayList<String>(Arrays.asList("අංක","දරන", "පනත"));
-        publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන"));
+        publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන", "යටතේ", "දැන්වීම්"));
+        titleKeywords = new ArrayList<String>(Arrays.asList("අංක", "/"));
         addDateKeywords();
     }
 
@@ -61,9 +78,11 @@ public class pdfReader {
             text = text.trim();
             text = convertText(text);
             lines = format(text);
+            System.out.println(lines);
         }
 
         document.close();
+        String title = selectedLine(lines, titleKeywords);
         String date = selectedLine(lines, datesKeywords);
         String act = selectedLine(lines, actKeywords);
         String news = selectedLine(lines, publicationKeywords);
@@ -71,10 +90,11 @@ public class pdfReader {
         String section = selectedLine(lines, sectionKeywords);
         String type = selectedLine(lines, typeKeywords);
 
-        System.out.println(date);
-        System.out.println(act);
-        System.out.println(news);
-        System.out.println(part + " - " + section + " - " + type);
+        System.out.println("Title: "+ lines.get(0));
+        System.out.println("Date: "+ date);
+        System.out.println("Acts: "+ act);
+        System.out.println("About: "+ news);
+        System.out.println("Sections: "+ part + " - " + section + " - " + type);
     }
 
     private static List<String> format(String text) {
@@ -103,11 +123,15 @@ public class pdfReader {
                     score++;
                 }
             }
-            scoredLine.put(i, score);
+            if (score != 0) {
+                scoredLine.put(i, score);
+            }
         }
-        Integer key = Collections.max(scoredLine.entrySet(), Map.Entry.comparingByValue()).getKey();
-        return lines.get(key);
-
+        if (!scoredLine.isEmpty()) {
+            Integer key = Collections.max(scoredLine.entrySet(), Map.Entry.comparingByValue()).getKey();
+            return lines.get(key);
+        }
+        return "";
     }
 
 
