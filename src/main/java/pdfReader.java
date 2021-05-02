@@ -21,7 +21,6 @@ public class pdfReader {
     private static List<String> actKeywords = new ArrayList<String>();
     private static List<String> publicationKeywords = new ArrayList<String>();
     private static List<String> typeKeywords = new ArrayList<String>();
-    private static List<String> titleKeywords = new ArrayList<String>();
 
     public static void main(String[] args) throws IOException {
 
@@ -64,7 +63,6 @@ public class pdfReader {
         typeKeywords = new ArrayList<String>(Arrays.asList("සාමාන්\u200Dය"));
         actKeywords = new ArrayList<String>(Arrays.asList("අංක","දරන", "පනත"));
         publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන", "යටතේ", "දැන්වීම්"));
-        titleKeywords = new ArrayList<String>(Arrays.asList("අංක", "/"));
         addDateKeywords();
     }
 
@@ -82,7 +80,7 @@ public class pdfReader {
         }
 
         document.close();
-        String title = selectedLine(lines, titleKeywords);
+        String no = lines.get(0);
         String date = selectedLine(lines, datesKeywords);
         String act = selectedLine(lines, actKeywords);
         String news = selectedLine(lines, publicationKeywords);
@@ -90,7 +88,7 @@ public class pdfReader {
         String section = selectedLine(lines, sectionKeywords);
         String type = selectedLine(lines, typeKeywords);
 
-        System.out.println("Title: "+ lines.get(0));
+        System.out.println("No: "+ no);
         System.out.println("Date: "+ date);
         System.out.println("Acts: "+ act);
         System.out.println("About: "+ news);
