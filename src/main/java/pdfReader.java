@@ -1,3 +1,4 @@
+import org.apache.commons.lang.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 
@@ -12,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class pdfReader {
 
@@ -61,7 +63,7 @@ public class pdfReader {
         partKeywords = new ArrayList<String>(Arrays.asList("වැනි","කොටස", "කොටසථ"));
         sectionKeywords = new ArrayList<String>(Arrays.asList("වැනි","ඡෙදය", "පළාත්", "පාලනය"));
         typeKeywords = new ArrayList<String>(Arrays.asList("සාමාන්\u200Dය"));
-        actKeywords = new ArrayList<String>(Arrays.asList("අංක","දරන", "පනත"));
+        actKeywords = new ArrayList<String>(Arrays.asList("අංක","දරන", "පනත", "නිවේදනය", "වගන්තිය"));
         publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන", "යටතේ", "දැන්වීම්"));
         addDateKeywords();
     }
@@ -75,7 +77,8 @@ public class pdfReader {
             String text = stripper.getText(document);
             text = text.trim();
             text = convertText(text);
-            lines = format(text);
+            lines = remove(text);
+            lines = format(lines);
             System.out.println(lines);
         }
 
@@ -95,17 +98,50 @@ public class pdfReader {
         System.out.println("Sections: "+ part + " - " + section + " - " + type);
     }
 
-    private static List<String> format(String text) {
-
+    private static List<String> remove(String text) {
         String[] allWords = text.split("\n");
         List<String> lines = new ArrayList<String>();
+        String[] unWantedList = new String[5];
+
+        unWantedList[0] = "ශ්\u200Dරී ලංකා ප්\u200Dරජාතාන්ත්\u200Dරික සමාජවාදී ජනරජයේ ගැසට් පත්\u200Dරය";
+        unWantedList[1] = "මෙම අති විශෙෂ ගැසට් පත්\u200Dරය අඅඅගාදජමපැබඑිගටදඩගකන වෙබ් අඩවියෙන් බාගත කළ හැක.";
+        unWantedList[2] = "ශ්\u200Dරී ලංකා රජයේ මුද්\u200Dරණ දෙපාර්තමේන්තුවේ මුද්\u200Dරණය කරන ලදී.";
+        unWantedList[3] = "රජයේ බලයපිට ප්\u200Dරසිද්ධ කරන ලදී";
+
+        Pattern lastDate = Pattern.compile("^[0-9]{4}+රැ+[0-9]{2}");
 
         for (int i = 0; i < allWords.length; i++) {
-            if (allWords[i].trim().length() > 0) {
-                String[] tokenized = allWords[i].trim().split("-");
-                for (int j = 0; j < tokenized.length; j++) {
-                    lines.add(tokenized[j].trim());
-                }
+//            if (!allWords[i].contains("සමාජවාදී ජනරජයේ ගැසට්")) {
+//                lines.add(allWords[i].trim());
+//            }
+//            if (!Arrays.stream(new String[]{unWantedList}).anyMatch(allWords[i]::contains)) {
+//                lines.add(allWords[i].trim());
+//            }
+
+            if (StringUtils.indexOfAny(allWords[i], unWantedList) == -1) {
+                lines.add(allWords[i].trim());
+            }
+
+            if (allWords[i].matches("^[0-9]{4}+රැ+[0-9]{2}")) {
+                lines.remove(allWords[i]);
+            }
+
+        }
+
+
+//
+//        lines.removeAll(unWantedList);
+        lines.removeAll(Arrays.asList("", null));
+        return lines;
+    }
+
+    private static List<String> format(List<String> text) {
+
+        List<String> lines = new ArrayList<String>();
+        for (int i = 0; i < text.size(); i++) {
+            String[] tokenized = text.get(i).trim().split("-");
+            for (int j = 0; j < tokenized.length; j++) {
+                lines.add(tokenized[j].trim());
             }
         }
         return lines;
