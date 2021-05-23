@@ -23,6 +23,7 @@ public class pdfReader {
     private static List<String> actKeywords = new ArrayList<String>();
     private static List<String> publicationKeywords = new ArrayList<String>();
     private static List<String> typeKeywords = new ArrayList<String>();
+    private static int index = 0;
 
     public static void main(String[] args) throws IOException {
 
@@ -40,7 +41,9 @@ public class pdfReader {
         for (String file:files) {
             System.out.println("------------------ File "+ i +"------------------------");
             method(file);
-            System.out.println("------------------------------------------");
+            System.out.println();
+            System.out.println();
+            //System.out.println("------------------------------------------");
             i++;
         }
 
@@ -79,23 +82,59 @@ public class pdfReader {
             text = convertText(text);
             lines = remove(text);
             lines = format(lines);
-            System.out.println(lines);
+//            System.out.println(lines);
         }
 
+
+
         document.close();
-        String no = lines.get(0);
-        String date = selectedLine(lines, datesKeywords);
+        String no = getValue(lines);
+        String date_desc = getValue(lines);
+        String date = getValue(lines);
+//        String date = selectedLine(lines, datesKeywords);
+//        String act = selectedLine(lines, actKeywords);
+//        String news = selectedLine(lines, publicationKeywords);
+//        String part = selectedLine(lines, partKeywords);
+//        String section = selectedLine(lines, sectionKeywords);
+//        String type = selectedLine(lines, typeKeywords);
+
+        String part = getValue(lines);
+        String section = checkScore(lines, sectionKeywords);
+        String type = checkScore(lines, typeKeywords);
+        String news = getValue(lines);
         String act = selectedLine(lines, actKeywords);
-        String news = selectedLine(lines, publicationKeywords);
-        String part = selectedLine(lines, partKeywords);
-        String section = selectedLine(lines, sectionKeywords);
-        String type = selectedLine(lines, typeKeywords);
+
+
 
         System.out.println("No: "+ no);
+        System.out.println("Date_in_details: "+ date_desc);
         System.out.println("Date: "+ date);
-        System.out.println("Acts: "+ act);
         System.out.println("About: "+ news);
         System.out.println("Sections: "+ part + " - " + section + " - " + type);
+        System.out.println("Acts: "+ act);
+        System.out.println();
+        System.out.println(lines);
+    }
+
+    private static String getValue(List<String> lines) {
+        String value = lines.get(index);
+        lines.remove(index);
+        return value;
+
+    }
+
+    private static String checkScore(List<String> lines, List<String> sectionKeywords) {
+        int score = 0;
+        String[] selecteLineWords = lines.get(index).split(" ");
+        for (String word: selecteLineWords) {
+            if(sectionKeywords.contains(word)) {
+                score++;
+            }
+        }
+        if (score > 0) {
+            return getValue(lines);
+        }
+        return "";
     }
 
     private static List<String> remove(String text) {
@@ -107,23 +146,16 @@ public class pdfReader {
         unWantedList[1] = "මෙම අති විශෙෂ ගැසට් පත්\u200Dරය අඅඅගාදජමපැබඑිගටදඩගකන වෙබ් අඩවියෙන් බාගත කළ හැක.";
         unWantedList[2] = "ශ්\u200Dරී ලංකා රජයේ මුද්\u200Dරණ දෙපාර්තමේන්තුවේ මුද්\u200Dරණය කරන ලදී.";
         unWantedList[3] = "රජයේ බලයපිට ප්\u200Dරසිද්ධ කරන ලදී";
+        unWantedList[4] = "අති විශෙෂ";
 
         Pattern lastDate = Pattern.compile("^[0-9]{4}+රැ+[0-9]{2}");
 
         for (int i = 0; i < allWords.length; i++) {
-//            if (!allWords[i].contains("සමාජවාදී ජනරජයේ ගැසට්")) {
-//                lines.add(allWords[i].trim());
-//            }
-//            if (!Arrays.stream(new String[]{unWantedList}).anyMatch(allWords[i]::contains)) {
-//                lines.add(allWords[i].trim());
-//            }
 
             if (StringUtils.indexOfAny(allWords[i], unWantedList) == -1) {
-                lines.add(allWords[i].trim());
-            }
-
-            if (allWords[i].matches("^[0-9]{4}+රැ+[0-9]{2}")) {
-                lines.remove(allWords[i]);
+                if (!allWords[i].matches("^.*[0-9]රැ.*$")) {
+                    lines.add(allWords[i].trim());
+                }
             }
 
         }
