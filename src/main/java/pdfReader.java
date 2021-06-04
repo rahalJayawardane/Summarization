@@ -22,7 +22,9 @@ public class pdfReader {
     private static List<String> sectionKeywords = new ArrayList<String>();
     private static List<String> actKeywords = new ArrayList<String>();
     private static List<String> publicationKeywords = new ArrayList<String>();
+    private static List<String> whoKeywords = new ArrayList<String>();
     private static List<String> typeKeywords = new ArrayList<String>();
+    private static List<String> unwantedKeywords = new ArrayList<String>();
     private static int index = 0;
 
     public static void main(String[] args) throws IOException {
@@ -30,12 +32,17 @@ public class pdfReader {
         addKeywords();
 
         List<String> files = new ArrayList<>();
-        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/1.pdf");
+//        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/1.pdf");
         files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/2.pdf");
         files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/3.pdf");
         files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/4.pdf");
         files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/5.pdf");
         files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/6.pdf");
+        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/7.pdf");
+        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/8.pdf");
+        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/9.pdf");
+        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/10.pdf");
+        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/11.pdf");
 
         int i =1;
         for (String file:files) {
@@ -68,6 +75,8 @@ public class pdfReader {
         typeKeywords = new ArrayList<String>(Arrays.asList("සාමාන්\u200Dය"));
         actKeywords = new ArrayList<String>(Arrays.asList("අංක","දරන", "පනත", "නිවේදනය", "වගන්තිය"));
         publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන", "යටතේ", "දැන්වීම්"));
+        whoKeywords = new ArrayList<String>(Arrays.asList("ලේකම්","අමාත්\u200Dය", "නිලධාරි", "ආණ්ඩුකාරවර", "කොමසාරිස්","අමාත්\u200Dය"));
+        unwantedKeywords = new ArrayList<String>(Arrays.asList("ශ්\u200Dරී ලංකා","මාර්ෂල්"));
         addDateKeywords();
     }
 
@@ -91,18 +100,12 @@ public class pdfReader {
         String no = getValue(lines);
         String date_desc = getValue(lines);
         String date = getValue(lines);
-//        String date = selectedLine(lines, datesKeywords);
-//        String act = selectedLine(lines, actKeywords);
-//        String news = selectedLine(lines, publicationKeywords);
-//        String part = selectedLine(lines, partKeywords);
-//        String section = selectedLine(lines, sectionKeywords);
-//        String type = selectedLine(lines, typeKeywords);
-
         String part = getValue(lines);
-        String section = checkScore(lines, sectionKeywords);
-        String type = checkScore(lines, typeKeywords);
+        String section = checkLine(lines, sectionKeywords);
+        String type = checkLine(lines, typeKeywords);
         String news = getValue(lines);
         String act = selectedLine(lines, actKeywords);
+        String who = selectedLineReverse(lines, whoKeywords);
 
 
 
@@ -112,8 +115,40 @@ public class pdfReader {
         System.out.println("About: "+ news);
         System.out.println("Sections: "+ part + " - " + section + " - " + type);
         System.out.println("Acts: "+ act);
-        System.out.println();
+        System.out.println("Who: "+ who);
         System.out.println(lines);
+        System.out.println();
+//        System.out.println(lines);
+    }
+
+    private static String selectedLineReverse(List<String> lines, List<String> keywords) {
+        int lineIndex = 0;
+        for (int i = (lines.size()-1) ; i > 0 ; i--) {
+            int score = 0;
+            String[] selecteLineWords = lines.get(i).split(" ");
+            String lastword = selecteLineWords[selecteLineWords.length-1].replaceAll("\\p{Punct}", "");
+            if(keywords.contains(lastword)) {
+                return getNameOfIssuer(lines, i) + " - " + lines.get(i);
+            }
+        }
+        return "";
+    }
+
+    private static String getNameOfIssuer(List<String> lines, int index) {
+        for (int i = index-1 ; i > 0 ; i--) {
+            boolean isName = true;
+            String prevLine = lines.get(i);
+            String[] selectedLineWords = prevLine.split(" ");
+            for (String word: selectedLineWords) {
+                if(isUnwanted(word)) {
+                    isName = false;
+                }
+            }
+            if (isName) {
+                return lines.get(i);
+            }
+        }
+        return "";
     }
 
     private static String getValue(List<String> lines) {
@@ -123,7 +158,7 @@ public class pdfReader {
 
     }
 
-    private static String checkScore(List<String> lines, List<String> sectionKeywords) {
+    private static String checkLine(List<String> lines, List<String> sectionKeywords) {
         int score = 0;
         String[] selecteLineWords = lines.get(index).split(" ");
         for (String word: selecteLineWords) {
@@ -140,32 +175,37 @@ public class pdfReader {
     private static List<String> remove(String text) {
         String[] allWords = text.split("\n");
         List<String> lines = new ArrayList<String>();
-        String[] unWantedList = new String[5];
+        for (int i = 0; i < allWords.length; i++) {
+            if (!isUnwanted(allWords[i])) {
+                lines.add(allWords[i].trim());
+            }
+        }
+
+        lines.removeAll(Arrays.asList("", null));
+        return lines;
+    }
+
+    private static boolean isUnwanted(String text) {
+        String[] unWantedList = new String[20];
+        List<String> englishWords = new ArrayList<String>(Arrays.asList("ඇන්ඩ්","ඔෆ්", "ද"));
 
         unWantedList[0] = "ශ්\u200Dරී ලංකා ප්\u200Dරජාතාන්ත්\u200Dරික සමාජවාදී ජනරජයේ ගැසට් පත්\u200Dරය";
         unWantedList[1] = "මෙම අති විශෙෂ ගැසට් පත්\u200Dරය අඅඅගාදජමපැබඑිගටදඩගකන වෙබ් අඩවියෙන් බාගත කළ හැක.";
         unWantedList[2] = "ශ්\u200Dරී ලංකා රජයේ මුද්\u200Dරණ දෙපාර්තමේන්තුවේ මුද්\u200Dරණය කරන ලදී.";
         unWantedList[3] = "රජයේ බලයපිට ප්\u200Dරසිද්ධ කරන ලදී";
         unWantedList[4] = "අති විශෙෂ";
+        unWantedList[5] = "ශ්\u200Dරී ලංකා";
 
         Pattern lastDate = Pattern.compile("^[0-9]{4}+රැ+[0-9]{2}");
 
-        for (int i = 0; i < allWords.length; i++) {
-
-            if (StringUtils.indexOfAny(allWords[i], unWantedList) == -1) {
-                if (!allWords[i].matches("^.*[0-9]රැ.*$")) {
-                    lines.add(allWords[i].trim());
-                }
+        if (StringUtils.indexOfAny(text, unWantedList) == -1) {
+            if (!text.matches("^.*[0-9]රැ.*$") && !englishWords.contains(text) ) {
+                return false;
             }
-
         }
-
-
-//
-//        lines.removeAll(unWantedList);
-        lines.removeAll(Arrays.asList("", null));
-        return lines;
+        return true;
     }
+
 
     private static List<String> format(List<String> text) {
 
