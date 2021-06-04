@@ -32,17 +32,18 @@ public class pdfReader {
         addKeywords();
 
         List<String> files = new ArrayList<>();
-//        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/1.pdf");
-        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/2.pdf");
-        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/3.pdf");
-        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/4.pdf");
-        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/5.pdf");
-        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/6.pdf");
-        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/7.pdf");
-        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/8.pdf");
-        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/9.pdf");
-        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/10.pdf");
-        files.add("/Users/rahal/Rahal/wso2_workspace/my_workspace/pdfReader/SamplePDFs/11.pdf");
+        files.add("./SamplePDFs/1.pdf");
+        files.add("./SamplePDFs/2.pdf");
+        files.add("./SamplePDFs/3.pdf");
+        files.add("./SamplePDFs/4.pdf");
+        files.add("./SamplePDFs/5.pdf");
+        files.add("./SamplePDFs/6.pdf");
+        files.add("./SamplePDFs/7.pdf");
+        files.add("./SamplePDFs/8.pdf");
+        files.add("./SamplePDFs/9.pdf");
+        files.add("./SamplePDFs/10.pdf");
+        files.add("./SamplePDFs/11.pdf");
+
 
         int i =1;
         for (String file:files) {
