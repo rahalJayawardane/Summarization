@@ -74,7 +74,7 @@ public class pdfReader {
         partKeywords = new ArrayList<String>(Arrays.asList("වැනි","කොටස", "කොටසථ"));
         sectionKeywords = new ArrayList<String>(Arrays.asList("වැනි","ඡෙදය", "පළාත්", "පාලනය"));
         typeKeywords = new ArrayList<String>(Arrays.asList("සාමාන්\u200Dය"));
-        actKeywords = new ArrayList<String>(Arrays.asList("අංක","දරන", "පනත", "නිවේදනය", "වගන්තිය"));
+        actKeywords = new ArrayList<String>(Arrays.asList("ආඥාපනත","අංක","දරන", "පනත", "වගන්තිය", "දැනුම්දීම", "සංග්\u200Dරහය", "දැන්වීම"));
         publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන", "යටතේ", "දැන්වීම්"));
         whoKeywords = new ArrayList<String>(Arrays.asList("ලේකම්","අමාත්\u200Dය", "නිලධාරි", "ආණ්ඩුකාරවර", "කොමසාරිස්","අමාත්\u200Dය"));
         unwantedKeywords = new ArrayList<String>(Arrays.asList("ශ්\u200Dරී ලංකා","මාර්ෂල්"));
@@ -105,21 +105,51 @@ public class pdfReader {
         String section = checkLine(lines, sectionKeywords);
         String type = checkLine(lines, typeKeywords);
         String news = getValue(lines);
-        String act = selectedLine(lines, actKeywords);
+        String act = (formatAct(lines, actKeywords));
         String who = selectedLineReverse(lines, whoKeywords);
-
-
 
         System.out.println("No: "+ no);
         System.out.println("Date_in_details: "+ date_desc);
         System.out.println("Date: "+ date);
         System.out.println("About: "+ news);
         System.out.println("Sections: "+ part + " - " + section + " - " + type);
+
         System.out.println("Acts: "+ act);
         System.out.println("Who: "+ who);
         System.out.println(lines);
         System.out.println();
-//        System.out.println(lines);
+    }
+
+    private static String formatAct(List<String> lines, List<String> keywords) {
+        String act = "";
+        List<String> tempLines = lines;
+        for (int i = 0 ; i < tempLines.size() ; i++) {
+            int score = 0;
+            String[] selectedLineWords = tempLines.get(i).split(" ");
+            String lastword = selectedLineWords[selectedLineWords.length-1].replaceAll("\\p{Punct}", "");
+            if(keywords.contains(lastword)) {
+                if (act.length() == 0) {
+                    act = tempLines.get(i);
+                } else {
+                    act = act + ",- " +  tempLines.get(i);
+                }
+            }
+        }
+        if (act.equals("")) {
+            act = selectedLine(lines, actKeywords, "යටතේ");
+        } else {
+            String[] words = act.split(",- ");
+            String newAct = "";
+            for (String word: words) {
+                if (newAct.equals("")) {
+                    newAct = getValue(lines, word);
+                } else {
+                    newAct = newAct + ", " +  getValue(lines, word);
+                }
+            }
+            act = newAct;
+        }
+        return act;
     }
 
     private static String selectedLineReverse(List<String> lines, List<String> keywords) {
@@ -154,6 +184,20 @@ public class pdfReader {
 
     private static String getValue(List<String> lines) {
         String value = lines.get(index);
+        lines.remove(index);
+        return value;
+
+    }
+
+    private static String getValue(List<String> lines, int index) {
+        String value = lines.get(index);
+        lines.remove(index);
+        return value;
+
+    }
+
+    private static String getValue(List<String> lines, String value) {
+        int index = lines.indexOf(value);
         lines.remove(index);
         return value;
 
@@ -220,7 +264,7 @@ public class pdfReader {
         return lines;
     }
 
-    private static String selectedLine(List<String> lines, List<String> keywords) {
+    private static String selectedLine(List<String> lines, List<String> keywords, String specialBraker) {
         HashMap<Integer, Integer> scoredLine = new HashMap<Integer, Integer>();
         for (int i = 0; i < lines.size(); i++) {
             int score = 0;
@@ -229,8 +273,11 @@ public class pdfReader {
                 if(keywords.contains(word)) {
                     score++;
                 }
+                if (word.contains(specialBraker)) {
+                    break;
+                }
             }
-            if (score != 0) {
+            if (score > 0) {
                 scoredLine.put(i, score);
             }
         }
