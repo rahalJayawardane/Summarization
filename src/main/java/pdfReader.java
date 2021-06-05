@@ -98,8 +98,6 @@ public class pdfReader {
 //            System.out.println(lines);
         }
 
-
-
         document.close();
         String no = getValue(lines);
         String date_desc = getValue(lines);
@@ -112,21 +110,21 @@ public class pdfReader {
         String who = selectedLineReverse(lines, whoKeywords);
         String where = getWhere(lines, whereKeywords);
 
-//        System.out.println("No: "+ no);
-//        System.out.println("Date_in_details: "+ date_desc);
-//        System.out.println("Date: "+ date);
-//        System.out.println("About: "+ news);
-//        System.out.println("Sections: "+ part + " - " + section + " - " + type);
+        System.out.println("No: "+ no);
+        System.out.println("Date_in_details: "+ date_desc);
+        System.out.println("Date: "+ date);
+        System.out.println("About: "+ news);
+        System.out.println("Sections: "+ part + " - " + section + " - " + type);
         System.out.println("Acts: "+ act);
-//        System.out.println("Who: "+ who);
-//        System.out.println("Where: "+ where);
-//        System.out.println(lines);
+        System.out.println("Who: "+ who);
+        System.out.println("Where: "+ where);
+        System.out.println(lines);
         System.out.println();
     }
 
     private static String getWhere(List<String> lines, List<String> whereKeywords) {
         String where = "";
-        List<String> tempLines = lines;
+        List<String> tempLines = new ArrayList<String>(lines);
         int startIndex = 0;
         int endIndex = 0;
         for (int i = 0 ; i < tempLines.size() ; i++) {
@@ -157,8 +155,10 @@ public class pdfReader {
         }
 
         for (int i = startIndex+1; i <= endIndex; i++) {
-            where = where + lines.get(i);
+            where = where + " - " + tempLines.get(i);
+            getValue(lines, tempLines.get(i));
         }
+
         return where;
     }
 
@@ -286,7 +286,6 @@ public class pdfReader {
     private static boolean isUnwanted(String text) {
         String[] unWantedList = new String[20];
         List<String> englishWords = new ArrayList<String>(Arrays.asList("ඇන්ඩ්","ඔෆ්", "ද"));
-
         unWantedList[0] = "ශ්\u200Dරී ලංකා ප්\u200Dරජාතාන්ත්\u200Dරික සමාජවාදී ජනරජයේ ගැසට් පත්\u200Dරය";
         unWantedList[1] = "මෙම අති විශෙෂ ගැසට් පත්\u200Dරය අඅඅගාදජමපැබඑිගටදඩගකන වෙබ් අඩවියෙන් බාගත කළ හැක.";
         unWantedList[2] = "ශ්\u200Dරී ලංකා රජයේ මුද්\u200Dරණ දෙපාර්තමේන්තුවේ මුද්\u200Dරණය කරන ලදී.";
@@ -294,6 +293,7 @@ public class pdfReader {
         unWantedList[4] = "අති විශෙෂ";
         unWantedList[5] = "ශ්\u200Dරී ලංකා";
         unWantedList[5] = "යොමු අංකය";
+        unWantedList[5] = "ජනා. කා.";
 
         Pattern lastDate = Pattern.compile("^[0-9]{4}+රැ+[0-9]{2}");
 
