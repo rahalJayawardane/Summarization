@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class pdfReader {
 
@@ -24,7 +27,7 @@ public class pdfReader {
     private static List<String> publicationKeywords = new ArrayList<String>();
     private static List<String> whoKeywords = new ArrayList<String>();
     private static List<String> typeKeywords = new ArrayList<String>();
-    private static List<String> unwantedKeywords = new ArrayList<String>();
+    private static List<String> whereKeywords = new ArrayList<String>();
     private static int index = 0;
 
     public static void main(String[] args) throws IOException {
@@ -77,7 +80,7 @@ public class pdfReader {
         actKeywords = new ArrayList<String>(Arrays.asList("ආඥාපනත","අංක","දරන", "පනත", "වගන්තිය", "දැනුම්දීම", "සංග්\u200Dරහය", "දැන්වීම"));
         publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන", "යටතේ", "දැන්වීම්"));
         whoKeywords = new ArrayList<String>(Arrays.asList("ලේකම්","අමාත්\u200Dය", "නිලධාරි", "ආණ්ඩුකාරවර", "කොමසාරිස්","අමාත්\u200Dය"));
-        unwantedKeywords = new ArrayList<String>(Arrays.asList("ශ්\u200Dරී ලංකා","මාර්ෂල්"));
+        whereKeywords = new ArrayList<String>(Arrays.asList("රාජගිරිය","කොළඹ","බත්තරමුල්ල","ගාල්ල","මාතලේ"));
         addDateKeywords();
     }
 
@@ -101,23 +104,62 @@ public class pdfReader {
         String no = getValue(lines);
         String date_desc = getValue(lines);
         String date = getValue(lines);
-        String part = getValue(lines);
+        String part = formatValues(getValue(lines));
         String section = checkLine(lines, sectionKeywords);
         String type = checkLine(lines, typeKeywords);
         String news = getValue(lines);
-        String act = (formatAct(lines, actKeywords));
+        String act = formatAct(lines, actKeywords);
         String who = selectedLineReverse(lines, whoKeywords);
+        String where = getWhere(lines, whereKeywords);
 
-        System.out.println("No: "+ no);
-        System.out.println("Date_in_details: "+ date_desc);
-        System.out.println("Date: "+ date);
-        System.out.println("About: "+ news);
-        System.out.println("Sections: "+ part + " - " + section + " - " + type);
-
+//        System.out.println("No: "+ no);
+//        System.out.println("Date_in_details: "+ date_desc);
+//        System.out.println("Date: "+ date);
+//        System.out.println("About: "+ news);
+//        System.out.println("Sections: "+ part + " - " + section + " - " + type);
         System.out.println("Acts: "+ act);
-        System.out.println("Who: "+ who);
-        System.out.println(lines);
+//        System.out.println("Who: "+ who);
+//        System.out.println("Where: "+ where);
+//        System.out.println(lines);
         System.out.println();
+    }
+
+    private static String getWhere(List<String> lines, List<String> whereKeywords) {
+        String where = "";
+        List<String> tempLines = lines;
+        int startIndex = 0;
+        int endIndex = 0;
+        for (int i = 0 ; i < tempLines.size() ; i++) {
+            String line = tempLines.get(i);
+            if(line.endsWith("දී ය.")) {
+                endIndex = tempLines.indexOf(line);
+            } if (line.endsWith("දින,")) {
+                startIndex = tempLines.indexOf(line);
+            }
+            if (endIndex > 0 && startIndex >0) {
+                break;
+            }
+        }
+
+        if (endIndex == 0) {
+            for (int i = (tempLines.size()-1) ; i > 0 ; i--) {
+                String[] words = tempLines.get(i).split(" ");
+                for (String word: words) {
+                    if(whereKeywords.contains(word.replaceAll("\\p{Punct}","")) ) {
+                        endIndex = i;
+                        break;
+                    }
+                }
+                if (endIndex > 0) {
+                    break;
+                }
+            }
+        }
+
+        for (int i = startIndex+1; i <= endIndex; i++) {
+            where = where + lines.get(i);
+        }
+        return where;
     }
 
     private static String formatAct(List<String> lines, List<String> keywords) {
@@ -137,6 +179,15 @@ public class pdfReader {
         }
         if (act.equals("")) {
             act = selectedLine(lines, actKeywords, "යටතේ");
+            String[] actWords = act.split(" ");
+            for (int i = actWords.length-1 ; i > 0; i--) {
+                if (actKeywords.contains(actWords[i]) ||
+                        (actWords[i].replaceAll("\\p{Punct}", "").matches("[0-9]+")) &&
+                                actKeywords.contains(actWords[i-1])) {
+                    act = Stream.of(actWords).limit((i+1)).collect(Collectors.joining(" "));
+                    break;
+                }
+            }
         } else {
             String[] words = act.split(",- ");
             String newAct = "";
@@ -156,10 +207,12 @@ public class pdfReader {
         int lineIndex = 0;
         for (int i = (lines.size()-1) ; i > 0 ; i--) {
             int score = 0;
-            String[] selecteLineWords = lines.get(i).split(" ");
+            String line = lines.get(i);
+            String[] selecteLineWords = line.split(" ");
             String lastword = selecteLineWords[selecteLineWords.length-1].replaceAll("\\p{Punct}", "");
             if(keywords.contains(lastword)) {
-                return getNameOfIssuer(lines, i) + " - " + lines.get(i);
+                String position = getValue(lines, lines.get(i));
+                return getNameOfIssuer(lines, i) + " - " + position;
             }
         }
         return "";
@@ -176,7 +229,7 @@ public class pdfReader {
                 }
             }
             if (isName) {
-                return lines.get(i);
+                return getValue(lines, i);
             }
         }
         return "";
@@ -240,6 +293,7 @@ public class pdfReader {
         unWantedList[3] = "රජයේ බලයපිට ප්\u200Dරසිද්ධ කරන ලදී";
         unWantedList[4] = "අති විශෙෂ";
         unWantedList[5] = "ශ්\u200Dරී ලංකා";
+        unWantedList[5] = "යොමු අංකය";
 
         Pattern lastDate = Pattern.compile("^[0-9]{4}+රැ+[0-9]{2}");
 
@@ -781,6 +835,14 @@ public class pdfReader {
         text = text.replace("\"", ",");
         text = text.replace("¿", "ළු");
         return text;
+    }
+
+    private static String formatValues(String value) {
+        value = value.replace("ෂ", "I");
+        value = value.replace("ඪ", "V");
+        value = value.replace("ඃ", "");
+        value = value.replace("කොටසථ", "කොටස");
+        return value;
     }
 }
 
