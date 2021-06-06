@@ -1,12 +1,11 @@
+package org.sinhala.summarization;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class PDFReader {
@@ -35,29 +33,35 @@ public class PDFReader {
         addKeywords();
 
         List<String> files = new ArrayList<>();
-//        files.add("./SamplePDFs/1.pdf");
-//        files.add("./SamplePDFs/2.pdf");
-//        files.add("./SamplePDFs/3.pdf");
-//        files.add("./SamplePDFs/4.pdf");
-//        files.add("./SamplePDFs/5.pdf");
-//        files.add("./SamplePDFs/6.pdf");
+        files.add("./SamplePDFs/1.pdf");
+        files.add("./SamplePDFs/2.pdf");
+        files.add("./SamplePDFs/3.pdf");
+        files.add("./SamplePDFs/4.pdf");
+        files.add("./SamplePDFs/5.pdf");
+        files.add("./SamplePDFs/6.pdf");
         files.add("./SamplePDFs/7.pdf");
-//        files.add("./SamplePDFs/8.pdf");
-//        files.add("./SamplePDFs/9.pdf");
-//        files.add("./SamplePDFs/10.pdf");
-//        files.add("./SamplePDFs/11.pdf");
+        files.add("./SamplePDFs/8.pdf");
+        files.add("./SamplePDFs/9.pdf");
+        files.add("./SamplePDFs/10.pdf");
+        files.add("./SamplePDFs/11.pdf");
 
 
         int i =1;
         for (String file:files) {
             System.out.println("------------------ File "+ i +"------------------------");
-            method(file);
+            //method(file);
             System.out.println();
             System.out.println();
             //System.out.println("------------------------------------------");
             i++;
         }
 
+    }
+
+    public static HashMap<String, Object> getDetails(int fileId) throws IOException {
+        addKeywords();
+        HashMap<String, Object> response = method("./SamplePDFs/"+fileId+".pdf");
+        return response;
     }
 
     private static void addDateKeywords() {
@@ -84,7 +88,7 @@ public class PDFReader {
         addDateKeywords();
     }
 
-    private static void method(String filename) throws IOException {
+    private static HashMap<String, Object> method(String filename) throws IOException {
 
         List<String> lines = new ArrayList<String>();
         PDDocument document = PDDocument.load(new File(filename));
@@ -110,6 +114,7 @@ public class PDFReader {
         String who = selectedLineReverse(lines, whoKeywords);
         String where = getWhere(lines, whereKeywords);
 
+
         System.out.println("No: "+ no);
         System.out.println("Date_in_details: "+ date_desc);
         System.out.println("Date: "+ date);
@@ -120,6 +125,21 @@ public class PDFReader {
         System.out.println("Where: "+ where);
         System.out.println(lines);
         System.out.println();
+
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("No", no);
+        response.put("Date_in_details", date_desc);
+        response.put("Date", date);
+        response.put("About", news);
+        response.put("Sections", part + " - " + section + " - " + type);
+        response.put("Acts", act);
+        response.put("Who", who);
+        response.put("Where", where);
+        response.put("others", lines);
+
+        return response;
+
     }
 
     private static String getWhere(List<String> lines, List<String> whereKeywords) {
