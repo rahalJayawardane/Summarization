@@ -31,25 +31,25 @@ public class PDFReader {
     public static void main(String[] args) throws IOException {
 
         addKeywords();
-
         List<String> files = new ArrayList<>();
-        files.add("./SamplePDFs/1.pdf");
-        files.add("./SamplePDFs/2.pdf");
-        files.add("./SamplePDFs/3.pdf");
-        files.add("./SamplePDFs/4.pdf");
-        files.add("./SamplePDFs/5.pdf");
-        files.add("./SamplePDFs/6.pdf");
-        files.add("./SamplePDFs/7.pdf");
-        files.add("./SamplePDFs/8.pdf");
-        files.add("./SamplePDFs/9.pdf");
-        files.add("./SamplePDFs/10.pdf");
-        files.add("./SamplePDFs/11.pdf");
+//        files.add("./SamplePDFs/1.pdf");
+//        files.add("./SamplePDFs/2.pdf");
+//        files.add("./SamplePDFs/3.pdf");
+//        files.add("./SamplePDFs/4.pdf");
+//        files.add("./SamplePDFs/5.pdf");
+//        files.add("./SamplePDFs/6.pdf");
+//        files.add("./SamplePDFs/7.pdf");
+//        files.add("./SamplePDFs/8.pdf");
+//        files.add("./SamplePDFs/9.pdf");
+//        files.add("./SamplePDFs/10.pdf");
+//        files.add("./SamplePDFs/11.pdf");
+        files.add("./SamplePDFs/2178-04_S.pdf");
 
 
         int i =1;
         for (String file:files) {
             System.out.println("------------------ File "+ i +"------------------------");
-            //method(file);
+            method(file);
             System.out.println();
             System.out.println();
             //System.out.println("------------------------------------------");
@@ -58,9 +58,12 @@ public class PDFReader {
 
     }
 
-    public static HashMap<String, Object> getDetails(int fileId) throws IOException {
+    public static HashMap<String, Object> getDetails(String file) throws IOException {
         addKeywords();
-        HashMap<String, Object> response = method("./SamplePDFs/"+fileId+".pdf");
+        DownloadPDF.download(file);
+        String[] words = file.split("/");
+        String fileName = words[words.length-1];
+        HashMap<String, Object> response = method("./SamplePDFs/"+fileName);
         return response;
     }
 

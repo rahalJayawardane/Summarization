@@ -208,6 +208,10 @@
       <change afterPath="$PROJECT_DIR$/../../my_ob/test/test.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../my_ob/testing/testing.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../.idea/my_workspace.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Sinhala_Summerization/src/main/java/org/sinhala/summarization/Server.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Sinhala_Summerization/src/main/java/org/sinhala/summarization/ServiceController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Sinhala_Summerization/src/test/java/org/sinhala/summarization/ServerTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/backlog.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../public/.idea/public.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../public/axis/test/test.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../public/axis/untitled/untitled.iml" afterDir="false" />
@@ -344,7 +348,15 @@
       <change beforePath="$PROJECT_DIR$/../../../setups/OB/Pre-Pack/client-virtusaau-npbs/AuthSmsOTP/feature/target/org.wso2.carbon.extension.identity.authenticator.smsotp.feature-3.0.4.zip" beforeDir="false" afterPath="$PROJECT_DIR$/../../../setups/OB/Pre-Pack/client-virtusaau-npbs/AuthSmsOTP/feature/target/org.wso2.carbon.extension.identity.authenticator.smsotp.feature-3.0.4.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../setups/OB/Pre-Pack/client-virtusaau-npbs/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../setups/OB/Pre-Pack/client-virtusaau-npbs/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/ServiceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/ServiceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pdfReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pdfReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/PDFReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/PDFReader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/ServiceController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/ServiceController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/pdfReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pdfReader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/test.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/test.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -417,7 +429,9 @@
     <option name="height" value="976" />
   </component>
   <component name="ProjectId" id="1rvKnAszmZkWMROLF8f80CCbcWu" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -465,13 +479,41 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="DTD" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.repository.indices" />
   </component>
-  <component name="RunManager" selected="Application.Server">
+  <component name="RunManager" selected="Application.PDFReader">
+    <configuration name="DownloadPDF" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.sinhala.summarization.DownloadPDF" />
+      <module name="pdfReader" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.sinhala.summarization.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PDFReader (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.sinhala.summarization.PDFReader" />
+      <module name="pdfReader" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.sinhala.summarization.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="PDFReader" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="PDFReader" />
       <module name="pdfReader" />
@@ -527,13 +569,16 @@
       <item itemvalue="Application.PDFReader" />
       <item itemvalue="Application.Server" />
       <item itemvalue="Application.test" />
+      <item itemvalue="Application.DownloadPDF" />
+      <item itemvalue="Application.PDFReader (1)" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Server" />
         <item itemvalue="Application.PDFReader" />
-        <item itemvalue="Application.Server" />
         <item itemvalue="Application.test" />
+        <item itemvalue="Application.PDFReader (1)" />
+        <item itemvalue="Application.DownloadPDF" />
+        <item itemvalue="Application.Server" />
       </list>
     </recent_temporary>
   </component>
@@ -596,14 +641,24 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/PDFReader.java</url>
-          <line>156</line>
-          <option name="timeStamp" value="2" />
+          <url>file://$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java</url>
+          <line>108</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/PDFReader.java</url>
-          <line>253</line>
-          <option name="timeStamp" value="3" />
+          <line>130</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/PDFReader.java</url>
+          <line>394</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/PDFReader.java</url>
+          <line>393</line>
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
