@@ -4,8 +4,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -58,9 +61,13 @@ public class PDFReader {
 
     }
 
+    public static HashMap<String, Object> downloadFile(String file) throws IOException {
+        DownloadPDF.download(file);
+        return getDetails(file);
+    }
+
     public static HashMap<String, Object> getDetails(String file) throws IOException {
         addKeywords();
-        DownloadPDF.download(file);
         String[] words = file.split("/");
         String fileName = words[words.length-1];
         HashMap<String, Object> response = method("./SamplePDFs/"+fileName);
@@ -143,6 +150,34 @@ public class PDFReader {
 
         return response;
 
+    }
+
+    private static void WritetoFile(String line) {
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        PrintWriter pw = null;
+
+        try {
+            fw = new FileWriter("test.txt", true);
+            bw = new BufferedWriter(fw);
+            pw = new PrintWriter(bw);
+
+            pw.println(line);
+            System.out.println("Data Successfully appended into file");
+            pw.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                pw.close();
+                bw.close();
+                fw.close();
+            } catch (IOException io) {
+                // can't do anything }
+            }
+
+        }
     }
 
     private static String getWhere(List<String> lines, List<String> whereKeywords) {
@@ -307,25 +342,46 @@ public class PDFReader {
     }
 
     private static boolean isUnwanted(String text) {
+        boolean hasNumbers = false;
+        boolean hasEnglish = false;
+        boolean hasUnwantedChar = false;
         String[] unWantedList = new String[20];
         List<String> englishWords = new ArrayList<String>(Arrays.asList("ඇන්ඩ්","ඔෆ්", "ද"));
+        List<String> alphabet = new ArrayList<String>(Arrays.asList("ඒ","බී","සී", "ඩී","එල්"));
         unWantedList[0] = "ශ්\u200Dරී ලංකා ප්\u200Dරජාතාන්ත්\u200Dරික සමාජවාදී ජනරජයේ ගැසට් පත්\u200Dරය";
         unWantedList[1] = "මෙම අති විශෙෂ ගැසට් පත්\u200Dරය අඅඅගාදජමපැබඑිගටදඩගකන වෙබ් අඩවියෙන් බාගත කළ හැක.";
         unWantedList[2] = "ශ්\u200Dරී ලංකා රජයේ මුද්\u200Dරණ දෙපාර්තමේන්තුවේ මුද්\u200Dරණය කරන ලදී.";
         unWantedList[3] = "රජයේ බලයපිට ප්\u200Dරසිද්ධ කරන ලදී";
         unWantedList[4] = "අති විශෙෂ";
         unWantedList[5] = "ශ්\u200Dරී ලංකා";
-        unWantedList[5] = "යොමු අංකය";
-        unWantedList[5] = "ජනා. කා.";
+        unWantedList[6] = "යොමු අංකය";
+        unWantedList[7] = "ජනා. කා.";
 
         Pattern lastDate = Pattern.compile("^[0-9]{4}+රැ+[0-9]{2}");
 
         if (StringUtils.indexOfAny(text, unWantedList) == -1) {
-            if (!text.matches("^.*[0-9]රැ.*$") && !englishWords.contains(text) ) {
-                return false;
+            if (text.matches("^.*[0-9]රැ.*$") || englishWords.contains(text) ) {
+                hasUnwantedChar = true;
             }
+
+            String[] words = text.split("\\p{Punct}");
+            for (String letter: words) {
+                if(letter.trim().matches("[0-9]+")) {
+                    hasNumbers = true;
+                }
+                if(alphabet.contains(letter)) {
+                    hasEnglish = true;
+                }
+            }
+
+            if((hasEnglish && hasNumbers) || hasUnwantedChar) {
+                return true;
+            }
+
+        } else {
+            return true;
         }
-        return true;
+        return false;
     }
 
 

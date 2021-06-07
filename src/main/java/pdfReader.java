@@ -48,10 +48,10 @@ public class PDFReader {
             e.printStackTrace();
         }
 
-//        result.forEach(x -> files.add(""+ x));
+        result.forEach(x -> files.add(""+ x));
 
 
-        files.add("./SamplePDFs/2180-12_S.pdf");
+//        files.add("./SamplePDFs/2180-12_S.pdf");
 //        files.add("./SamplePDFs/2.pdf");
 //        files.add("./SamplePDFs/3.pdf");
 //        files.add("./SamplePDFs/4.pdf");
