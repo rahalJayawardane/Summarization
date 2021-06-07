@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,8 +37,19 @@ public class PDFReader {
     public static void main(String[] args) throws IOException {
 
         addKeywords();
+
         List<String> files = new ArrayList<>();
-//        files.add("./SamplePDFs/1.pdf");
+        List<Path> result = new ArrayList<>();
+        try (Stream<Path> paths = Files.walk(Paths.get("./SamplePDFs"))) {
+            result = paths.filter(Files::isRegularFile).collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        result.forEach(x -> files.add(""+ x));
+
+
+//        files.add("./SamplePDFs/2180-12_S.pdf");
 //        files.add("./SamplePDFs/2.pdf");
 //        files.add("./SamplePDFs/3.pdf");
 //        files.add("./SamplePDFs/4.pdf");
@@ -46,11 +60,15 @@ public class PDFReader {
 //        files.add("./SamplePDFs/9.pdf");
 //        files.add("./SamplePDFs/10.pdf");
 //        files.add("./SamplePDFs/11.pdf");
-        files.add("./SamplePDFs/2178-04_S.pdf");
+//        files.add("./SamplePDFs/2178-04_S_2.pdf");
 
 
         int i =1;
         for (String file:files) {
+            if (!file.endsWith(".pdf")) {
+                continue;
+            }
+            System.out.println(file);
             System.out.println("------------------ File "+ i +"------------------------");
             method(file);
             System.out.println();
@@ -91,7 +109,7 @@ public class PDFReader {
         partKeywords = new ArrayList<String>(Arrays.asList("වැනි","කොටස", "කොටසථ"));
         sectionKeywords = new ArrayList<String>(Arrays.asList("වැනි","ඡෙදය", "පළාත්", "පාලනය"));
         typeKeywords = new ArrayList<String>(Arrays.asList("සාමාන්\u200Dය"));
-        actKeywords = new ArrayList<String>(Arrays.asList("ආඥාපනත","අංක","දරන", "පනත", "වගන්තිය", "දැනුම්දීම", "සංග්\u200Dරහය", "දැන්වීම"));
+        actKeywords = new ArrayList<String>(Arrays.asList("ආඥාපනත","අංක","දරන", "පනත", "වගන්තිය", "දැනුම්දීම", "සංග්\u200Dරහය", "දැන්වීම","පරිච්ෙඡ්දය"));
         publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන", "යටතේ", "දැන්වීම්"));
         whoKeywords = new ArrayList<String>(Arrays.asList("ලේකම්","අමාත්\u200Dය", "නිලධාරි", "ආණ්ඩුකාරවර", "කොමසාරිස්","අමාත්\u200Dය"));
         whereKeywords = new ArrayList<String>(Arrays.asList("රාජගිරිය","කොළඹ","බත්තරමුල්ල","ගාල්ල","මාතලේ"));
@@ -106,6 +124,9 @@ public class PDFReader {
             PDFTextStripper stripper = new PDFTextStripper("ISO-15924");
             String text = stripper.getText(document);
             text = text.trim();
+            if(text.contains("ɼ")) {
+                text = correctUnicode(text);
+            }
             text = convertText(text);
             lines = remove(text);
             lines = format(lines);
@@ -135,6 +156,10 @@ public class PDFReader {
         System.out.println("Where: "+ where);
         System.out.println(lines);
         System.out.println();
+
+        String line = filename+"^" + no +"^" + date_desc+"^" +date +"^" +news +"^" +news +"^" +
+                part + " - " + section + " - " + type +"^" +act +"^" +who +"^" +where +"^" +lines;
+        WritetoFile(line);
 
 
         HashMap<String, Object> response = new HashMap<>();
@@ -922,6 +947,56 @@ public class PDFReader {
         value = value.replace("ඃ", "");
         value = value.replace("කොටසථ", "කොටස");
         return value;
+    }
+
+    public static String correctUnicode(String text) {
+        text = text.replaceAll("  "," ");
+        text = text.replaceAll("ɼ","Y%S");
+        text = text.replaceAll("\\/","\\$");
+        text = text.replaceAll("\\,","\"");
+        text = text.replaceAll("ȝජාතාǦƵක","m%cd;dka;%sl");
+        text = text.replaceAll("Ǐ","§");
+        text = text.replaceAll("රජෙɏ","rcfha");
+        text = text.replaceAll("Ÿ","Ü");
+        text = text.replaceAll("පƴය","m;%h");
+        text = text.replaceAll("Ư",";s");
+        text = text.replaceAll("ɪෙශෂ","úfYI");
+        text = text.replaceAll("őǧ","cqks");
+        text = text.replaceAll("වැǧ","jeks");
+        text = text.replaceAll("ǧ","ks");
+        text = text.replaceAll("\\.","\'");
+        text = text.replaceAll("බලයȘට","n,hmsg");
+        text = text.replaceAll("ȝʆǊධ","m%isoaO");
+        text = text.replaceAll("ෙකʣටස","fldgi");
+        text = text.replaceAll("ඉඩȼ","bvï");
+        text = text.replaceAll("ගැǨම",".ekSu");
+        text = text.replaceAll("Șʘබඳ","ms<sn|");
+        text = text.replaceAll("දැǦɫȼ","oekaùï");
+        text = text.replaceAll("ෙමම","fuu");
+        text = text.replaceAll("www'documents'gov'lk","අඅඅගාදජමපැබඑිගටදඩගකන");
+        text = text.replaceAll("අඩɪෙයǦ","wvúfhka");
+        text = text.replaceAll("ෙවȩ","fjí");
+        text = text.replaceAll("ෙමම","oekaùï");
+        text = text.replaceAll("Ʈ","ත්");
+        text = text.replaceAll("ගැǨෙȼ",".ekSfï");
+        text = text.replaceAll("Ǧ","න්");
+        text = text.replaceAll("ɫ","ù");
+        text = text.replaceAll("පɜļෙņදය","mßÉfþoh");
+        text = text.replaceAll("Ę","ග්");
+        text = text.replaceAll("ෙයʣȿ","fhduq");
+        text = text.replaceAll("ȿǖණ","uqøK");
+        text = text.replaceAll("ෙදපාəතෙȼන්Ʊෙɩ","fomd¾;fïka;=fõ");
+        text = text.replaceAll("ɪ","වි");
+        text = text.replaceAll("ඡි","කු");
+        text = text.replaceAll("ə","ර්");
+        text = text.replaceAll("ȝාෙǊɵය","ප්\u200Dරාදේශීය");
+        text = text.replaceAll("ȼ","ම්");
+        text = text.replaceAll("ෙɢ","ලේ");
+        text = text.replaceAll("ɐ","යි");
+        text = text.replaceAll("ǎ","දි");
+        text = text.replaceAll("ɏ","ය්");
+
+        return text;
     }
 }
 

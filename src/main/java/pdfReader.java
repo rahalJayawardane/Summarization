@@ -439,7 +439,7 @@ public class PDFReader {
     }
 
 
-    private static String convertText(String text) {
+    public static String convertText(String text) {
 
         text = text.replace("ff;%", "ත්‍රෛ");
         text = text.replace("ffY", "ශෛ");
