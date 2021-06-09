@@ -1,5 +1,6 @@
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
+import org.sinhala.summarization.PDFReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,73 +71,43 @@ public class test {
 //        }
 
 
-        String filename = "./SamplePDFs/2184-50_S.pdf";
-//        filename ="./SamplePDFs/2045-01_S.pdf";
-        PDDocument document = PDDocument.load(new File(filename));
-        if (!document.isEncrypted()) {
-            PDFTextStripper stripper = new PDFTextStripper("ISO-15924");
-            String text = stripper.getText(document);
-            text = text.replaceAll("  ", " ");
-            if(text.contains("ɼ")) {
-                text = correctUnicode(text);
-            }
-            text = text.trim();
-            text = PDFReader.convertText(text);
-            System.out.println(text);
+//        String filename = "./SamplePDFs/2180-22_S.pdf";
+////        filename ="./SamplePDFs/2045-01_S.pdf";
+//        PDDocument document = PDDocument.load(new File(filename));
+//        if (!document.isEncrypted()) {
+//            PDFTextStripper stripper = new PDFTextStripper("ISO-15924");
+//            String text = stripper.getText(document);
+//            text = text.replaceAll("  ", " ");
+//            if(text.contains("ɼ")) {
+//                text = PDFReader.correctUnicode(text);
+//            }
+//            text = text.trim();
+////            text = PDFReader.convertText(text);
+//            System.out.println(text);
+//        }
+//
+//
+//        document.close();
+
+//        String lastword = "ඉඩම් හා ඉඩම් සංවර්ධන අමාත්\u200Dය.";
+//        if(lastword.matches(".*\\p{Punct}")) {
+////            lastword = lastword.replace(".*\\p{Punct}", "");
+//            lastword = lastword.replace(".", "");
+//            lastword = lastword.replace(",", "");
+//            System.out.println(lastword);
+//        }
+
+
+        String t5 = "2020 අංක 63/1";
+        String[] words = t5.split(" ");
+        String lastWord = words[words.length-1].replaceAll("\\p{Punct}", "");
+        if ((lastWord.matches("[0-9]+") && "අංක".equals(words[words.length-2]))) {
+            System.out.println("done");
+        } else {
+            System.out.println("no");
         }
 
-
-        document.close();
-
-
     }
 
-    public static String correctUnicode(String text) {
-        text = text.replaceAll("ɼ","Y%S");
-        text = text.replaceAll("\\/","\\$");
-        text = text.replaceAll("\\,","\"");
-        text = text.replaceAll("ȝජාතාǦƵක","m%cd;dka;%sl");
-        text = text.replaceAll("Ǐ","§");
-        text = text.replaceAll("රජෙɏ","rcfha");
-        text = text.replaceAll("Ÿ","Ü");
-        text = text.replaceAll("පƴය","m;%h");
-        text = text.replaceAll("Ư",";s");
-        text = text.replaceAll("ɪෙශෂ","úfYI");
-        text = text.replaceAll("őǧ","cqks");
-        text = text.replaceAll("වැǧ","jeks");
-        text = text.replaceAll("ǧ","ks");
-        text = text.replaceAll("\\.","\'");
-        text = text.replaceAll("බලයȘට","n,hmsg");
-        text = text.replaceAll("ȝʆǊධ","m%isoaO");
-        text = text.replaceAll("ෙකʣටස","fldgi");
-        text = text.replaceAll("ඉඩȼ","bvï");
-        text = text.replaceAll("ගැǨම",".ekSu");
-        text = text.replaceAll("Șʘබඳ","ms<sn|");
-        text = text.replaceAll("දැǦɫȼ","oekaùï");
-        text = text.replaceAll("ෙමම","fuu");
-        text = text.replaceAll("www'documents'gov'lk","අඅඅගාදජමපැබඑිගටදඩගකන");
-        text = text.replaceAll("අඩɪෙයǦ","wvúfhka");
-        text = text.replaceAll("ෙවȩ","fjí");
-        text = text.replaceAll("ෙමම","oekaùï");
-        text = text.replaceAll("Ʈ","ත්");
-        text = text.replaceAll("ගැǨෙȼ",".ekSfï");
-        text = text.replaceAll("Ǧ","න්");
-        text = text.replaceAll("ɫ","ù");
-        text = text.replaceAll("පɜļෙņදය","mßÉfþoh");
-        text = text.replaceAll("Ę","ග්");
-        text = text.replaceAll("ෙයʣȿ","fhduq");
-        text = text.replaceAll("ȿǖණ","uqøK");
-        text = text.replaceAll("ෙදපාəතෙȼන්Ʊෙɩ","fomd¾;fïka;=fõ");
-        text = text.replaceAll("ɪ","වි");
-        text = text.replaceAll("ඡි","කු");
-        text = text.replaceAll("ə","ර්");
-        text = text.replaceAll("ȝාෙǊɵය","ප්\u200Dරාදේශීය");
-        text = text.replaceAll("ȼ","ම්");
-        text = text.replaceAll("ෙɢ","ලේ");
-        text = text.replaceAll("ɐ","යි");
-        text = text.replaceAll("ǎ","දි");
-        text = text.replaceAll("ɏ","ය්");
 
-        return text;
-    }
 }

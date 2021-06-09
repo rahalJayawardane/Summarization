@@ -284,10 +284,14 @@ public class PDFReader {
             int score = 0;
             String line = lines.get(i);
             String[] selecteLineWords = line.split(" ");
-            String lastword = selecteLineWords[selecteLineWords.length-1].replaceAll("\\p{Punct}", "");
-            if(keywords.contains(lastword)) {
-                String position = getValue(lines, lines.get(i));
-                return getNameOfIssuer(lines, i) + " - " + position;
+            String lastword = selecteLineWords[selecteLineWords.length-1];
+            if(lastword.matches(".*\\p{Punct}")) {
+                lastword = lastword.replace(".", "");
+                lastword = lastword.replace(",", "");
+                if(keywords.contains(lastword)) {
+                    String position = getValue(lines, lines.get(i));
+                    return getNameOfIssuer(lines, i) + " - " + position;
+                }
             }
         }
         return "";
@@ -439,7 +443,7 @@ public class PDFReader {
     }
 
 
-    public static String convertText(String text) {
+    private static String convertText(String text) {
 
         text = text.replace("ff;%", "ත්‍රෛ");
         text = text.replace("ffY", "ශෛ");

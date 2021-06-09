@@ -348,8 +348,10 @@
       <change beforePath="$PROJECT_DIR$/../../../setups/OB/Pre-Pack/client-virtusaau-npbs/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../setups/OB/Pre-Pack/client-virtusaau-npbs/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pdfReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pdfReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/test.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/PDFReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/PDFReader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pdfReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pdfReader.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/test.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/test.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test.txt" afterDir="false" />
     </list>
@@ -486,7 +488,7 @@
       <recent name="$PROJECT_DIR$/src/main/resources/public" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Server">
+  <component name="RunManager" selected="Application.PDFReader (1)">
     <configuration name="DownloadPDF" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.sinhala.summarization.DownloadPDF" />
       <module name="pdfReader" />
@@ -575,10 +577,10 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Server" />
-        <item itemvalue="Application.test" />
         <item itemvalue="Application.PDFReader (1)" />
+        <item itemvalue="Application.test" />
         <item itemvalue="Application.PDFReader" />
+        <item itemvalue="Application.Server" />
         <item itemvalue="Application.DownloadPDF" />
       </list>
     </recent_temporary>
@@ -643,7 +645,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java</url>
-          <line>136</line>
+          <line>139</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -653,18 +655,28 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/PDFReader.java</url>
-          <line>394</line>
+          <line>398</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/PDFReader.java</url>
-          <line>393</line>
+          <line>397</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/sinhala/summarization/ServiceController.java</url>
           <line>59</line>
           <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java</url>
+          <line>308</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java</url>
+          <line>299</line>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

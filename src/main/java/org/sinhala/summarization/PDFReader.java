@@ -49,7 +49,7 @@ public class PDFReader {
         result.forEach(x -> files.add(""+ x));
 
 
-//        files.add("./SamplePDFs/2180-12_S.pdf");
+//        files.add("./SamplePDFs/2181-06_S.pdf");
 //        files.add("./SamplePDFs/2.pdf");
 //        files.add("./SamplePDFs/3.pdf");
 //        files.add("./SamplePDFs/4.pdf");
@@ -61,6 +61,10 @@ public class PDFReader {
 //        files.add("./SamplePDFs/10.pdf");
 //        files.add("./SamplePDFs/11.pdf");
 //        files.add("./SamplePDFs/2178-04_S_2.pdf");
+//        files.add("./SamplePDFs/2181-19_S.pdf");
+//        files.add("./SamplePDFs/2045-01_S.pdf");
+//        files.add("./SamplePDFs/2184-52_S.pdf");
+//        files.add("./SamplePDFs/2179-08_S.pdf");
 
 
         int i =1;
@@ -93,13 +97,11 @@ public class PDFReader {
     }
 
     private static void addDateKeywords() {
-        List<String> keywords = new ArrayList<String>(Arrays.asList("මස","වැනි"));
-        List<String> months = new ArrayList<String>(Arrays.asList("ජනවාරි","පෙබරවාරි","මාර්තු","අප්\u200Dරියෙල්","මැයි","ජූනි",
+        List<String> months = new ArrayList<String>(Arrays.asList("මස", "ජනවාරි","පෙබරවාරි","මාර්තු","අප්\u200Dරියෙල්","මැයි","ජූනි",
                 "ජූලි","අගෝස්තු","සැප්තැම්බර්","ඔක්තෝබර්","නොවැම්බර්","දෙසැම්බර්"));
         List<String> days = new ArrayList<String>(Arrays.asList("සඳුදා","අඟහරුවාදා","බදාදා","බ්\u200Dරහස්පතින්දා","සිකුරාදා",
                 "සෙනසුරාදා","ඉරිදා"));
 
-        datesKeywords.addAll(keywords);
         datesKeywords.addAll(months);
         datesKeywords.addAll(days);
     }
@@ -109,9 +111,10 @@ public class PDFReader {
         partKeywords = new ArrayList<String>(Arrays.asList("වැනි","කොටස", "කොටසථ"));
         sectionKeywords = new ArrayList<String>(Arrays.asList("වැනි","ඡෙදය", "පළාත්", "පාලනය"));
         typeKeywords = new ArrayList<String>(Arrays.asList("සාමාන්\u200Dය"));
-        actKeywords = new ArrayList<String>(Arrays.asList("ආඥාපනත","අංක","දරන", "පනත", "වගන්තිය", "දැනුම්දීම", "සංග්\u200Dරහය", "දැන්වීම","පරිච්ෙඡ්දය"));
-        publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන", "යටතේ", "දැන්වීම්"));
-        whoKeywords = new ArrayList<String>(Arrays.asList("ලේකම්","අමාත්\u200Dය", "නිලධාරි", "ආණ්ඩුකාරවර", "කොමසාරිස්","අමාත්\u200Dය"));
+        actKeywords = new ArrayList<String>(Arrays.asList("ආඥාපනත", "පනත", "වගන්තිය", "සංග්\u200Dරහය","පරිච්ෙඡ්දය","ව්\u200Dයවස්ථා"));
+        publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන", "යටතේ", "දැන්වීම්", "ආදිය"));
+        whoKeywords = new ArrayList<String>(Arrays.asList("ලේකම්","අමාත්\u200Dය", "නිලධාරි", "ආණ්ඩුකාරවර", "කොමසාරිස්",
+                "අමාත්\u200Dය","ජනරාල්","ජනාධිපති"));
         whereKeywords = new ArrayList<String>(Arrays.asList("රාජගිරිය","කොළඹ","බත්තරමුල්ල","ගාල්ල","මාතලේ"));
         addDateKeywords();
     }
@@ -130,35 +133,45 @@ public class PDFReader {
             text = convertText(text);
             lines = remove(text);
             lines = format(lines);
-//            System.out.println(lines);
         }
 
+//        System.out.println(lines);
         document.close();
-        String no = getValue(lines);
-        String date_desc = getValue(lines);
-        String date = getValue(lines);
-        String part = formatValues(getValue(lines));
-        String section = checkLine(lines, sectionKeywords);
-        String type = checkLine(lines, typeKeywords);
-        String news = getValue(lines);
+//        String no = getValue(lines);
+//        String date_desc = getValue(lines);
+//        String date = getValue(lines);
+//        String part = formatValues(getValue(lines));
+//        String section = checkLine(lines, sectionKeywords);
+//        String type = checkLine(lines, typeKeywords);
+//        String news = getValue(lines);
+//        String act = formatAct(lines, actKeywords);
+//        String who = selectedLineReverse(lines, whoKeywords);
+//        String where = getWhere(lines, whereKeywords);
+
+        String no = formatNo(getCorrectLine(lines, new ArrayList<String>(Arrays.asList("අංක"))));
+        String date_desc = getCorrectLine(lines, datesKeywords);
+        String date = getDate(lines);
+        String part = formatValues(getCorrectLine(lines, sectionKeywords));
+//        String section = getCorrectLine(lines, sectionKeywords);
+//        String type = getCorrectLine(lines, typeKeywords);
+        String about = getCorrectLine(lines, publicationKeywords);
         String act = formatAct(lines, actKeywords);
         String who = selectedLineReverse(lines, whoKeywords);
         String where = getWhere(lines, whereKeywords);
 
-
         System.out.println("No: "+ no);
         System.out.println("Date_in_details: "+ date_desc);
         System.out.println("Date: "+ date);
-        System.out.println("About: "+ news);
-        System.out.println("Sections: "+ part + " - " + section + " - " + type);
+        System.out.println("About: "+ about);
+        System.out.println("Sections: "+ part);
         System.out.println("Acts: "+ act);
         System.out.println("Who: "+ who);
         System.out.println("Where: "+ where);
         System.out.println(lines);
         System.out.println();
 
-        String line = filename+"^" + no +"^" + date_desc+"^" +date +"^" +news +"^" +news +"^" +
-                part + " - " + section + " - " + type +"^" +act +"^" +who +"^" +where +"^" +lines;
+        String line = filename+"^" + no +"^" + date_desc+"^" +date +"^" +about +"^" +
+                part +"^" +act +"^" +who +"^" +where +"^" +lines;
         WritetoFile(line);
 
 
@@ -166,8 +179,8 @@ public class PDFReader {
         response.put("No", no);
         response.put("Date_in_details", date_desc);
         response.put("Date", date);
-        response.put("About", news);
-        response.put("Sections", part + " - " + section + " - " + type);
+        response.put("About", about);
+        response.put("Sections", part );
         response.put("Acts", act);
         response.put("Who", who);
         response.put("Where", where);
@@ -175,6 +188,23 @@ public class PDFReader {
 
         return response;
 
+    }
+
+    private static String formatNo(String text) {
+        if(text.split(" ").length > 2) {
+            return "අංක" + " " + text.split("අංක")[1];
+        }
+        return text;
+    }
+
+    private static String getDate(List<String> lines) {
+        String line2 = "";
+        for (String line:lines) {
+            if (line.matches("([12]\\d{3}.(0[1-9]|1[0-2]).(0[1-9]|[12]\\d|3[01]))")) {
+                return getValue(lines, line);
+            }
+        }
+        return line2;
     }
 
     private static void WritetoFile(String line) {
@@ -203,6 +233,19 @@ public class PDFReader {
             }
 
         }
+    }
+
+    private static String getCorrectLine(List<String> lines, List<String> keywords) {
+        String lineWord = "";
+        for (String line:lines) {
+            String[] words = line.split(" ");
+            for(String word: words) {
+                if(keywords.contains(word)) {
+                    return getValue(lines, line);
+                }
+            }
+        }
+        return lineWord;
     }
 
     private static String getWhere(List<String> lines, List<String> whereKeywords) {
@@ -246,6 +289,43 @@ public class PDFReader {
     }
 
     private static String formatAct(List<String> lines, List<String> keywords) {
+        String lineWord = "";
+        String tempWord = "";
+        outerloop:
+        for (String line:lines) {
+            String[] words = line.split(" ");
+            String lastWord = words[words.length-1].replaceAll("\\p{Punct}", "");
+            for(String word: words) {
+                if(keywords.contains(word) || ("අංක".equals(word))) {
+                    tempWord = getValue(lines, line);
+                    break outerloop;
+                }
+            }
+        }
+
+        String[] words = tempWord.split(" ");
+        String lastWord = words[words.length-1].replaceAll("\\p{Punct}", "");
+        if(keywords.contains(lastWord) || (lastWord.matches("[0-9]+") && "අංක".equals(words[words.length-2]))) {
+            return tempWord;
+        } else {
+            int index = words.length-1;
+            for (int i= index; i > 0; i--) {
+                if (keywords.contains(words[i]) || (words[i].matches("[0-9]+") && "අංක".equals(words[i-1]))) {
+                    index = i;
+                    break;
+                }
+
+            }
+            for (int i = 0; i < index + 1; i++) {
+                lineWord = lineWord + " " + words[i];
+            }
+        }
+        return lineWord;
+    }
+
+
+
+    private static String formatAct_old(List<String> lines, List<String> keywords) {
         String act = "";
         List<String> tempLines = lines;
         for (int i = 0 ; i < tempLines.size() ; i++) {
@@ -292,10 +372,14 @@ public class PDFReader {
             int score = 0;
             String line = lines.get(i);
             String[] selecteLineWords = line.split(" ");
-            String lastword = selecteLineWords[selecteLineWords.length-1].replaceAll("\\p{Punct}", "");
-            if(keywords.contains(lastword)) {
-                String position = getValue(lines, lines.get(i));
-                return getNameOfIssuer(lines, i) + " - " + position;
+            String lastword = selecteLineWords[selecteLineWords.length-1];
+            if(lastword.matches(".*\\p{Punct}")) {
+                lastword = lastword.replace(".", "");
+                lastword = lastword.replace(",", "");
+                if(keywords.contains(lastword)) {
+                    String position = getValue(lines, lines.get(i));
+                    return getNameOfIssuer(lines, i) + " - " + position;
+                }
             }
         }
         return "";
@@ -414,10 +498,18 @@ public class PDFReader {
 
         List<String> lines = new ArrayList<String>();
         for (int i = 0; i < text.size(); i++) {
-            String[] tokenized = text.get(i).trim().split("-");
-            for (int j = 0; j < tokenized.length; j++) {
-                lines.add(tokenized[j].trim());
+            if(!text.get(i).contains("වැනි කොටස")){
+                String[] tokenized = text.get(i).trim().split("-| ජ් ");
+                for (int j = 0; j < tokenized.length; j++) {
+                    lines.add(tokenized[j].trim());
+                }
+            } else {
+                String[] tokenized = text.get(i).trim().split(" - ");
+                for (int j = 0; j < tokenized.length; j++) {
+                    lines.add(tokenized[j].trim());
+                }
             }
+
         }
         return lines;
     }
@@ -946,6 +1038,7 @@ public class PDFReader {
         value = value.replace("ඪ", "V");
         value = value.replace("ඃ", "");
         value = value.replace("කොටසථ", "කොටස");
+        value = value.replace("ජ්", "-");
         return value;
     }
 
@@ -995,6 +1088,18 @@ public class PDFReader {
         text = text.replaceAll("ɐ","යි");
         text = text.replaceAll("ǎ","දි");
         text = text.replaceAll("ɏ","ය්");
+        text = text.replaceAll("ɣ","ලි");
+        text = text.replaceAll("ļ","ච්");
+        text = text.replaceAll("ș","පී");
+        text = text.replaceAll("Ő","ජී");
+        text = text.replaceAll("ǩɞ","නු");
+        text = text.replaceAll("Ǌ","රු");
+        text = text.replaceAll("ෙɩ","වේ");
+        text = text.replaceAll("Œ","ජූ");
+        text = text.replaceAll("ෙņ","ඡෙ");
+        text = text.replaceAll("Þ","දා");
+        text = text.replaceAll("ǿ","ඳූ");
+
 
         return text;
     }
