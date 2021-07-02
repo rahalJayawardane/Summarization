@@ -5,9 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="62b3cf0b-1ae5-45a7-998c-f7d81bc24cd3" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/ConvertToSinhala.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/RemoveSpecialChars.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/PDFReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/PDFReader.class" afterDir="false" />
@@ -323,8 +320,16 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java</url>
-          <line>361</line>
-          <option name="timeStamp" value="31" />
+          <line>274</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java</url>
+          <line>85</line>
+          <properties class="org.sinhala.summarization.PDFReader">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="37" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

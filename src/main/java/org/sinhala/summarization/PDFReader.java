@@ -46,10 +46,10 @@ public class PDFReader {
             e.printStackTrace();
         }
 
-//        result.forEach(x -> files.add(""+ x));
+        result.forEach(x -> files.add(""+ x));
 
 
-//        files.add("./SamplePDFs/2184-52_S.pdf");
+//        files.add("./SamplePDFs/2184-41_S.pdf");
 //        files.add("./SamplePDFs/2.pdf");
 //        files.add("./SamplePDFs/3.pdf");
 //        files.add("./SamplePDFs/4.pdf");
@@ -115,7 +115,10 @@ public class PDFReader {
         publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන", "යටතේ", "දැන්වීම්", "ආදිය"));
         whoKeywords = new ArrayList<String>(Arrays.asList("ලේකම්","අමාත්\u200Dය", "නිලධාරි", "ආණ්ඩුකාරවර", "කොමසාරිස්",
                 "අමාත්\u200Dය","ජනරාල්","ජනාධිපති","සභාපති","නිලධාරී","දිසාපති", "අමාත\u200Dය","නිලධාරීල"));
-        whereKeywords = new ArrayList<String>(Arrays.asList("රාජගිරිය","කොළඹ","බත්තරමුල්ල","ගාල්ල","මාතලේ"));
+        whereKeywords = new ArrayList<String>(Arrays.asList("රාජගිරිය","කොළඹ","බත්තරමුල්ල","ගාල්ල","මාතලේ","කුරුණෑගල","ගම්පහ",
+                "මහනුවර","මුලතිව්","මඩකලපුව","අම්පාර","හම්බන්තොට","යාපනය","පුත්තලම","ත්\u200Dරිකුණාමලය","වවුනියාව", "මොණරාගල",
+                "අනුරාධපුර","බදූල්ල",
+                "දිස්ති්\u200Dරක්කය","දිස්ත්\u200Dරික්කය"));
         addDateKeywords();
     }
 
@@ -157,8 +160,8 @@ public class PDFReader {
         System.out.println(lines);
         System.out.println();
 
-        String line = filename+"^" + no +"^" + date_desc+"^" +date +"^" +about +"^" +
-                part +"^" +act +"^" +who +"^" +where +"^" +lines;
+        String line = filename+";" + no +";" + date_desc+";" +date +";" +about +";" +
+                part +";" +act +";" +who +";" +where +";" +lines;
         WritetoFile(line);
 
 
@@ -244,19 +247,21 @@ public class PDFReader {
             String line = tempLines.get(i);
             if(line.endsWith("දී ය.")) {
                 endIndex = tempLines.indexOf(line);
-            } if (line.endsWith("දින,")) {
+            } if (line.endsWith("දින,") || line.endsWith("දින.")) {
                 startIndex = tempLines.indexOf(line);
             }
             if (endIndex > 0 && startIndex >0) {
                 break;
             }
         }
+        System.out.println(startIndex);
 
         if (endIndex == 0) {
             for (int i = (tempLines.size()-1) ; i > 0 ; i--) {
                 String[] words = tempLines.get(i).split(" ");
                 for (String word: words) {
-                    if(whereKeywords.contains(word.replaceAll("\\p{Punct}","")) ) {
+                    if(whereKeywords.contains(word.replaceAll("\\p{Punct}","")) &&
+                            (word.endsWith(".") || word.endsWith(",") || (word.equals("කොළඹ")) && words.length <= 2) ) {
                         endIndex = i;
                         break;
                     }
@@ -265,6 +270,10 @@ public class PDFReader {
                     break;
                 }
             }
+        }
+
+        if (endIndex-startIndex > 5) {
+            startIndex = endIndex-1;
         }
 
         for (int i = startIndex+1; i <= endIndex; i++) {
