@@ -1,6 +1,8 @@
 package org.sinhala.summarization;
 
+import java.security.Key;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -21,27 +23,29 @@ public class ExtractSummary {
 
 
     public static List<String> filerNotice(List<String> lines) {
+        noticeWordCount = Utils.countWords(lines);
         List<String> newLines = new ArrayList<>();
-
         outerloop:
         for (String line: lines) {
+            boolean adding = true;
             String[] words = line.split(" ");
             if (words.length < 7 ) {
                 for (String word: words) {
                     // if lines have only integers remove them
-                    if(words.length == 1 && word.matches("[0-9]+")) {
-                        break outerloop;
+                    if(words.length == 1 && (word.matches("[0-9]+") || !word.contains("[a-zA-Z]+"))) {
+                        adding = false;
                     }
                     if (line.replaceAll("\\p{Punct}","").endsWith("වැනි දින")) {
-                        break outerloop;
+                        adding = false;
                     }
                 }
             }
-            newLines.add(line.replaceAll("\\p{Punct}",""));
+            if (adding) {
+                newLines.add(replaceLast(line,"\\p{Punct}",""));
+            }
         }
         lines = newLines.stream().distinct().collect(Collectors.toList());
         lines = selectRemainingWords(lines);
-        noticeWordCount = Utils.countWords(lines);
         lines = cleanNotice(lines);
         summarizedWordCount = Utils.countWords(lines);
         return lines;
@@ -50,14 +54,18 @@ public class ExtractSummary {
     private static List<String> cleanNotice(List<String> lines) {
         for (String line: lines) {
             int index = lines.indexOf(line);
+            line = clearStrings(line);
             line = line.replaceAll("ප්\u200Dරජාතාන්ත්\u200Dරික සමාජවාදී ජනරජයේ", "");
             line = line.replaceAll("වන මම", "");
             line = line.replaceAll("වන ම", "");
-            if (AbstractSummary.act.length() > 0) {
+            if (AbstractSummary.who.length() > 0) {
                 line = checkAndReplace(AbstractSummary.who, line);
             }
             if (AbstractSummary.act.length() > 0) {
                 line = checkAndReplace(AbstractSummary.act, line);
+            }
+            if (AbstractSummary.about.length() > 0) {
+                line = checkAndReplace(AbstractSummary.about, line);
             }
             line = line.replaceAll("  ", " ");
             lines.set(index, line);
@@ -65,12 +73,47 @@ public class ExtractSummary {
         return lines;
     }
 
+    private static String clearStrings(String line) {
+        for (String word: line.split(" ")) {
+            if(word.length() <= 2) {
+                 switch (word) {
+                     case "ේ":
+                         line = line.replace("ේ","");
+                         break;
+                     case "ඃ":
+                         line = line.replace("ඃ","");
+                         break;
+                 }
+            }
+        }
+        return line.trim();
+    }
+
     private static String checkAndReplace(String words, String line) {
         String[] selectedWords = words.split("-");
         for (String selectedWord: selectedWords) {
             line = line.replaceAll(selectedWord.replaceAll("\\p{Punct}","").trim(), " ");
+
+            List<String> selectedWordPhase = new ArrayList<>(Arrays.asList(selectedWord.toLowerCase().split("\\s+")));
+            List<String> lineWordPhase = new ArrayList<>(Arrays.asList(line.toLowerCase().split("\\s+")));
+            lineWordPhase.retainAll(selectedWordPhase);
+
+            if (lineWordPhase.size() > 1) {
+                lineWordPhase.remove(lineWordPhase.size()-1);
+                String newLine = Utils.joinLines(lineWordPhase);
+                line = line.replace(newLine, "ඉහත");
+            }
+
         }
+
         return line;
+    }
+
+    public static String replaceLast(String text, String regex, String replacement) {
+        if (text.endsWith(regex)) {
+            return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement);
+        }
+        return text;
     }
 
     private static List<String> selectRemainingWords(List<String> lines) {
@@ -78,13 +121,14 @@ public class ExtractSummary {
         for (String line: lines) {
             int scoreSection = 0;
             int scoreActs = 0;
+            int scoreTitle = 0;
             String[] words = line.split(" ");
             for (String word: words) {
                 if (KeyWords.sectionKeywords.contains(word)) {
                     scoreSection++;
                 }
-                if (KeyWords.secondActKeywords.contains(word)) {
-                    scoreActs++;
+                if (KeyWords.titleKeywords.contains(word)) {
+                    scoreTitle++;
                 }
             }
 
@@ -92,8 +136,8 @@ public class ExtractSummary {
                 AbstractSummary.part = AbstractSummary.part + " - " + line;
                 needToRemove.add(line);
             }
-            if((Double.parseDouble(String.valueOf(scoreActs)) / words.length) >= 0.5 ) {
-                AbstractSummary.act = AbstractSummary.act + " - " + line;
+            if((Double.parseDouble(String.valueOf(scoreTitle)) / words.length) >= 0.5 ) {
+                AbstractSummary.about = AbstractSummary.about + " - " + line;
                 needToRemove.add(line);
             }
         }
@@ -104,4 +148,76 @@ public class ExtractSummary {
 
         return lines;
     }
+
+    public static List<String> removeRepeats(List<String> lines) {
+        int count;
+        HashMap<Integer, String> repeatingWords = new HashMap<>();
+        List<String> repeatedPhases = new ArrayList<>();
+        String words[] = Utils.joinLines(lines).split(" ");
+
+        for(int i = 0; i < words.length; i++) {
+            count = 1;
+            for(int j = i+1; j < words.length; j++) {
+                if(Utils.removePunt(words[i]).equals(Utils.removePunt(words[j]))) {
+                    count++;
+                    words[j] = "0";
+                }
+            }
+
+            if(count > 1 && words[i] != "0") {
+                String word = Utils.removePunt(words[i]);
+                if (word.length() < 2) {
+                    continue;
+                }
+                if (word.endsWith("(") || word.endsWith(")")) {
+                    word = word.substring(0,word.length()-2);
+                }
+                repeatingWords.put(i, word);
+            }
+        }
+
+        for (int i = 0; i < words.length; i++) {
+            if (repeatingWords.containsKey(i)) {
+                String word = repeatingWords.get(i);
+                for (int j = i+1; j< words.length; j++) {
+                    if (!repeatingWords.containsKey(j)) {
+                        if (word.split(" ").length >= 2) {
+                            repeatedPhases.add(Utils.removePunt(word));
+                        }
+                        i = j;
+                        break;
+                    } else {
+                        word = word + " " + repeatingWords.get(j);
+                    }
+                }
+            }
+
+        }
+
+        KeyWords.gazetteKeywords = repeatedPhases;
+        return removeRepeatsFromNotice(lines);
+    }
+
+    private static List<String> removeRepeatsFromNotice(List<String> lines) {
+
+        for (String line: lines) {
+            int index = lines.indexOf(line);
+            for (String keyword: KeyWords.gazetteKeywords) {
+                line = line.replaceAll(Utils.removePunt(keyword), "");
+            }
+            lines.set(index, line.trim());
+        }
+
+        List<String> tempList = new ArrayList<>();
+
+        for (String line: lines) {
+            int index = lines.indexOf(line);
+            if (line.split(" ").length >= 2) {
+                tempList.add(line.trim());
+            }
+        }
+
+        return tempList;
+    }
+
 }

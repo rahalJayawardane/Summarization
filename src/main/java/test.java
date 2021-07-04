@@ -1,5 +1,6 @@
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
+import org.sinhala.summarization.KeyWords;
 import org.sinhala.summarization.PDFReader;
 
 import java.io.File;
@@ -98,14 +99,20 @@ public class test {
 //        }
 
 
-        String t5 = "2020 අංක 63/1";
-        String[] words = t5.split(" ");
-        String lastWord = words[words.length-1].replaceAll("\\p{Punct}", "");
-        if ((lastWord.matches("[0-9]+") && "අංක".equals(words[words.length-2]))) {
-            System.out.println("done");
-        } else {
-            System.out.println("no");
-        }
+//        String t5 = "2020 අංක 63/1";
+//        String[] words = t5.split(" ");
+//        String lastWord = words[words.length-1].replaceAll("\\p{Punct}", "");
+//        if ((lastWord.matches("[0-9]+") && "අංක".equals(words[words.length-2]))) {
+//            System.out.println("done");
+//        } else {
+//            System.out.println("no");
+//        }
+
+
+        String g = "ආර්ඩබ්පී ඇන්ඩ් බාර් වීඑස්වී යූඑස්පී පීඑච්ඩී,";
+        System.out.println(KeyWords.alphabet.contains(g));
+
+        System.out.println(g.contains("යූ"));
 
     }
 

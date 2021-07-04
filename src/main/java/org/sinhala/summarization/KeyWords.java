@@ -9,6 +9,7 @@ public class KeyWords {
     public static List<String> datesKeywords = new ArrayList<String>();
     public static List<String> partKeywords = new ArrayList<String>();
     public static List<String> sectionKeywords = new ArrayList<String>();
+    public static List<String> titleKeywords = new ArrayList<String>();
     public static List<String> actKeywords = new ArrayList<String>();
     public static List<String> secondActKeywords = new ArrayList<String>();
     public static List<String> publicationKeywords = new ArrayList<String>();
@@ -23,8 +24,11 @@ public class KeyWords {
             "සඳුදා","අඟහරුවාදා","බදාදා","බ්\u200Dරහස්පතින්දා","සිකුරාදා","සෙනසුරාදා","ඉරිදා"));
 
     public static List<String> englishWords = new ArrayList<String>(Arrays.asList("ඇන්ඩ්","ඔෆ්", "ද"));
-    public static List<String> alphabet = new ArrayList<String>(Arrays.asList("ඒ","බී","සී", "ඩී","එල්"));
+    public static List<String> alphabet = new ArrayList<String>(Arrays.asList("ඒ","බී","සී","ඩී","එෆ්","එල්","අයි","එම්"));
     public static String[] unWantedList = new String[20];
+
+    public static List<String> gazetteKeywords = new ArrayList<>();
+
 
 
 
@@ -48,7 +52,7 @@ public class KeyWords {
                 "අනුරාධපුර","බදූල්ල",
                 "දිස්ති්\u200Dරක්කය","දිස්ත්\u200Dරික්කය"));
 
-        secondActKeywords= new ArrayList<String>(Arrays.asList("නියමය", "වැනි", "යටතේ","ප්\u200Dරකාශය"));
+        titleKeywords= new ArrayList<String>(Arrays.asList("වගන්ති", "වැනි", "යටතේ","දැන්වීම","නියමය","ප්\u200Dරකාශය"));
         sectionKeywords.addAll(actKeywords);
 
         addDateKeywords();

@@ -40,8 +40,9 @@ public class PDFReader {
 //        result.forEach(x -> files.add(""+ x));
 
 
-        files.add("./SamplePDFs/2183-26_S.pdf");
+//        files.add("./SamplePDFs/2179-20_S.pdf");
 //        files.add("./SamplePDFs/2181-24_S.pdf");
+        files.add("./SamplePDFs/2230-11_S.pdf");
 
 
         int i =1;
@@ -94,7 +95,13 @@ public class PDFReader {
         int total = Utils.countWords(lines);
 
         AbstractSummary.AssignValues(lines);
+
         lines = ExtractSummary.filerNotice(lines);
+        String firstSummary = Utils.joinLines(lines);
+
+        lines = ExtractSummary.removeRepeats(lines);
+        String secondSummary = Utils.joinLines(lines);
+
 
         String no = AbstractSummary.no;
         String date_desc = AbstractSummary.date_desc;
@@ -104,7 +111,7 @@ public class PDFReader {
         String act = AbstractSummary.act;
         String who = AbstractSummary.who;
         String where = AbstractSummary.where;
-        int summary = ExtractSummary.summarizedWordCount;
+        int summary = Utils.countWords(lines);
         double ratio = (double) summary/ (double) total;
 
         System.out.println("No: "+ no);
@@ -115,6 +122,7 @@ public class PDFReader {
         System.out.println("Acts: "+ act);
         System.out.println("Who: "+ who);
         System.out.println("Where: "+ where);
+        System.out.println(KeyWords.gazetteKeywords);
         System.out.println(lines);
         System.out.println("Total - " + total);
         System.out.println("Summary - " + summary);
@@ -122,7 +130,7 @@ public class PDFReader {
         System.out.println();
 
         String line = filename+";" + no +";" + date_desc+";" +date +";" +about +";" +
-                part +";" +act +";" +who +";" +where +";" +total +";"+summary +";"+ratio +";" +lines;
+                part +";" +act +";" +who +";" +where +";" +total +";"+summary +";"+ratio +";" +KeyWords.gazetteKeywords+";" +lines;
         WritetoFile(line);
 
 
@@ -223,12 +231,14 @@ public class PDFReader {
                     if(letter.trim().matches("[0-9]+")) {
                         hasNumbers = true;
                     }
-                    if(KeyWords.alphabet.contains(letter)) {
-                        hasEnglish = true;
+                    for (String englishChar: KeyWords.alphabet) {
+                        if (letter.contains(englishChar)) {
+                            hasEnglish = true;
+                        }
                     }
                 }
 
-                if((hasEnglish && hasNumbers) || hasUnwantedChar) {
+                if((hasEnglish && hasNumbers) || hasUnwantedChar || hasEnglish) {
                     text = "";
                 }
             }

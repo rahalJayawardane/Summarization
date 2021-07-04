@@ -26,4 +26,18 @@ public class Utils {
         return count;
     }
 
+    public static String joinLines(List<String> lines) {
+        String sentence = "";
+        for (String line: lines) {
+            sentence = sentence + " " + line;
+        }
+        return sentence.trim();
+    }
+
+    public static String removePunt(String word) {
+        if (word.endsWith("\\p{Punct}")) {
+            word = word.substring(0,word.length()-2);
+        }
+        return word;
+    }
 }
