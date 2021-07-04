@@ -38,6 +38,7 @@ public class Utils {
         if (word.endsWith("\\p{Punct}")) {
             word = word.substring(0,word.length()-2);
         }
+        word = word.replaceAll("\\p{P}","");
         return word;
     }
 }

@@ -166,12 +166,7 @@ public class ExtractSummary {
 
             if(count > 1 && words[i] != "0") {
                 String word = Utils.removePunt(words[i]);
-                if (word.length() < 2) {
-                    continue;
-                }
-                if (word.endsWith("(") || word.endsWith(")")) {
-                    word = word.substring(0,word.length()-2);
-                }
+
                 repeatingWords.put(i, word);
             }
         }

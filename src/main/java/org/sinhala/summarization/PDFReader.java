@@ -37,12 +37,12 @@ public class PDFReader {
             e.printStackTrace();
         }
 
-//        result.forEach(x -> files.add(""+ x));
+        result.forEach(x -> files.add(""+ x));
 
 
 //        files.add("./SamplePDFs/2179-20_S.pdf");
 //        files.add("./SamplePDFs/2181-24_S.pdf");
-        files.add("./SamplePDFs/2230-11_S.pdf");
+//        files.add("./SamplePDFs/2230-11_S.pdf");
 
 
         int i =1;
