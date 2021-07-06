@@ -51,6 +51,15 @@ public class ExtractSummary {
         return lines;
     }
 
+    private static List<String> identifyTitle(List<String> lines) {
+        for (String line: lines) {
+            if (line.replaceAll("\\p{Punct}","").endsWith("පිරවීම")) {
+                AbstractSummary.title = Utils.getValue(lines, line);
+            }
+        }
+        return lines;
+    }
+
     private static List<String> cleanNotice(List<String> lines) {
         for (String line: lines) {
             int index = lines.indexOf(line);
@@ -92,9 +101,12 @@ public class ExtractSummary {
     private static String checkAndReplace(String words, String line) {
         String[] selectedWords = words.split("-");
         for (String selectedWord: selectedWords) {
+            if(selectedWord.trim().length() < 2) {
+                continue;
+            }
             line = line.replaceAll(selectedWord.replaceAll("\\p{Punct}","").trim(), " ");
 
-            List<String> selectedWordPhase = new ArrayList<>(Arrays.asList(selectedWord.toLowerCase().split("\\s+")));
+            List<String> selectedWordPhase = new ArrayList<>(Arrays.asList(selectedWord.trim().toLowerCase().split("\\s+")));
             List<String> lineWordPhase = new ArrayList<>(Arrays.asList(line.toLowerCase().split("\\s+")));
             lineWordPhase.retainAll(selectedWordPhase);
 
@@ -120,7 +132,7 @@ public class ExtractSummary {
         List<String> needToRemove = new ArrayList<>();
         for (String line: lines) {
             int scoreSection = 0;
-            int scoreActs = 0;
+            int scoreParts = 0;
             int scoreTitle = 0;
             String[] words = line.split(" ");
             for (String word: words) {
@@ -130,6 +142,9 @@ public class ExtractSummary {
                 if (KeyWords.titleKeywords.contains(word)) {
                     scoreTitle++;
                 }
+                if (KeyWords.partKeywords.contains(word)) {
+                    scoreParts++;
+                }
             }
 
             if((Double.parseDouble(String.valueOf(scoreSection)) / words.length) >= 0.5 ) {
@@ -138,6 +153,10 @@ public class ExtractSummary {
             }
             if((Double.parseDouble(String.valueOf(scoreTitle)) / words.length) >= 0.5 ) {
                 AbstractSummary.about = AbstractSummary.about + " - " + line;
+                needToRemove.add(line);
+            }
+            if((Double.parseDouble(String.valueOf(scoreParts)) / words.length) >= 0.5 ) {
+                AbstractSummary.part = AbstractSummary.part + " - " + line;
                 needToRemove.add(line);
             }
         }
@@ -190,7 +209,26 @@ public class ExtractSummary {
         }
 
         KeyWords.gazetteKeywords = repeatedPhases;
-        return removeRepeatsFromNotice(lines);
+        lines = identifyTitle(lines);
+        lines = removeRepeatsFromNotice(lines);
+        lines = removeBrackets(lines);
+        return lines;
+    }
+
+    private static List<String> removeBrackets(List<String> lines) {
+        int startIndex = 0;
+        boolean foundOpenBracket = false;
+        int endIndex = 0;
+        boolean foundCloseBracket = false;
+
+        for (String line: lines) {
+            int index = lines.indexOf(line);
+            line = line.replaceAll("\\(.*", "");
+            line = line.replaceAll(".*\\)", "");
+            lines.set(index, line);
+        }
+
+        return lines;
     }
 
     private static List<String> removeRepeatsFromNotice(List<String> lines) {

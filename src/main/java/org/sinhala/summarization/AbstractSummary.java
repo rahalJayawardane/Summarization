@@ -20,6 +20,7 @@ public class AbstractSummary {
     public static String act;
     public static String who;
     public static String where;
+    public static String title;
 
 
     public static void AssignValues(List<String> lines) {

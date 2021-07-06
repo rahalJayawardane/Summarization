@@ -44,7 +44,7 @@ public class KeyWords {
         sectionKeywords = new ArrayList<String>(Arrays.asList("වැනි","ඡෙදය", "පළාත්", "පාලනය","සාමාන්\u200Dය"));
         typeKeywords = new ArrayList<String>(Arrays.asList("සාමාන්\u200Dය"));
         actKeywords = new ArrayList<String>(Arrays.asList("ආඥාපනත", "පනත", "වගන්තිය", "සංග්\u200Dරහය","පරිච්ෙඡ්දය","ව්\u200Dයවස්ථා"));
-        publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන", "යටතේ", "දැන්වීම්", "ආදිය"));
+        publicationKeywords = new ArrayList<String>(Arrays.asList("රජයේ","නිවේදන", "දැන්වීම්", "ආදිය"));
         whoKeywords = new ArrayList<String>(Arrays.asList("ලේකම්","අමාත්\u200Dය", "නිලධාරි", "ආණ්ඩුකාරවර", "කොමසාරිස්",
                 "අමාත්\u200Dය","ජනරාල්","ජනාධිපති","සභාපති","නිලධාරී","දිසාපති", "අමාත\u200Dය","නිලධාරීල"));
         whereKeywords = new ArrayList<String>(Arrays.asList("රාජගිරිය","කොළඹ","බත්තරමුල්ල","ගාල්ල","මාතලේ","කුරුණෑගල","ගම්පහ",
@@ -71,6 +71,7 @@ public class KeyWords {
         unWantedList[9] = "ප්\u200Dරජාතාන්ත්\u200Dරික";
         unWantedList[10] = "සමාජවාදී";
         unWantedList[11] = "ගැසට් පත්\u200Dරය";
+        unWantedList[12] = "මගේ අංකයථ";
 
 
         return unWantedList;

@@ -37,10 +37,11 @@ public class PDFReader {
             e.printStackTrace();
         }
 
-        result.forEach(x -> files.add(""+ x));
+//        result.forEach(x -> files.add(""+ x));
 
 
-//        files.add("./SamplePDFs/2179-20_S.pdf");
+//        files.add("./SamplePDFs/2186-27_S.pdf");
+        files.add("./SamplePDFs/2184-12_S.pdf");
 //        files.add("./SamplePDFs/2181-24_S.pdf");
 //        files.add("./SamplePDFs/2230-11_S.pdf");
 
@@ -111,6 +112,7 @@ public class PDFReader {
         String act = AbstractSummary.act;
         String who = AbstractSummary.who;
         String where = AbstractSummary.where;
+        String title = AbstractSummary.title;
         int summary = Utils.countWords(lines);
         double ratio = (double) summary/ (double) total;
 
@@ -122,6 +124,7 @@ public class PDFReader {
         System.out.println("Acts: "+ act);
         System.out.println("Who: "+ who);
         System.out.println("Where: "+ where);
+        System.out.println("Title: "+ title);
         System.out.println(KeyWords.gazetteKeywords);
         System.out.println(lines);
         System.out.println("Total - " + total);
@@ -130,7 +133,7 @@ public class PDFReader {
         System.out.println();
 
         String line = filename+";" + no +";" + date_desc+";" +date +";" +about +";" +
-                part +";" +act +";" +who +";" +where +";" +total +";"+summary +";"+ratio +";" +KeyWords.gazetteKeywords+";" +lines;
+                part +";" +act +";" +who +";" +where +";"+title +";" +total +";"+summary +";"+ratio +";" +KeyWords.gazetteKeywords+";" +lines;
         WritetoFile(line);
 
 
