@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ExtractSummary {
@@ -47,15 +48,40 @@ public class ExtractSummary {
         lines = newLines.stream().distinct().collect(Collectors.toList());
         lines = selectRemainingWords(lines);
         lines = cleanNotice(lines);
+        lines = removeLines(lines);
         summarizedWordCount = Utils.countWords(lines);
         return lines;
     }
 
+    private static List<String> removeLines(List<String> lines) {
+        List<String> newLines = new ArrayList<>();
+        for (String line: lines) {
+            for (String removeWord: KeyWords.removingKeywords) {
+                line = line.replaceAll(removeWord, "");
+            }
+            String newLine = "";
+            for (String words : line.split(",")) {
+                if (words.split(" ").length > 3) {
+                    newLine = newLine + words;
+                }
+            }
+
+            if (newLine.split(" ").length > 4) {
+                newLines.add(newLine);
+            }
+        }
+        return newLines;
+    }
+
     private static List<String> identifyTitle(List<String> lines) {
+        AbstractSummary.title = "";
         for (String line: lines) {
             if (line.replaceAll("\\p{Punct}","").endsWith("පිරවීම")) {
-                AbstractSummary.title = Utils.getValue(lines, line);
+                AbstractSummary.title = line;
             }
+        }
+        if (AbstractSummary.title != "") {
+            lines.remove(lines.indexOf(AbstractSummary.title));
         }
         return lines;
     }
@@ -64,9 +90,9 @@ public class ExtractSummary {
         for (String line: lines) {
             int index = lines.indexOf(line);
             line = clearStrings(line);
-            line = line.replaceAll("ප්\u200Dරජාතාන්ත්\u200Dරික සමාජවාදී ජනරජයේ", "");
-            line = line.replaceAll("වන මම", "");
-            line = line.replaceAll("වන ම", "");
+            for (String removeWord: KeyWords.removingKeywords) {
+                line = line.replaceAll(removeWord, "");
+            }
             if (AbstractSummary.who.length() > 0) {
                 line = checkAndReplace(AbstractSummary.who, line);
             }
@@ -104,6 +130,7 @@ public class ExtractSummary {
             if(selectedWord.trim().length() < 2) {
                 continue;
             }
+            line = line.replaceAll(selectedWord, " ");
             line = line.replaceAll(selectedWord.replaceAll("\\p{Punct}","").trim(), " ");
 
             List<String> selectedWordPhase = new ArrayList<>(Arrays.asList(selectedWord.trim().toLowerCase().split("\\s+")));
@@ -111,11 +138,10 @@ public class ExtractSummary {
             lineWordPhase.retainAll(selectedWordPhase);
 
             if (lineWordPhase.size() > 1) {
-                lineWordPhase.remove(lineWordPhase.size()-1);
-                String newLine = Utils.joinLines(lineWordPhase);
-                line = line.replace(newLine, "ඉහත");
+                for (String word: lineWordPhase) {
+                    line = line.replaceAll(Pattern.quote(word), "");
+                }
             }
-
         }
 
         return line;
@@ -152,7 +178,9 @@ public class ExtractSummary {
                 needToRemove.add(line);
             }
             if((Double.parseDouble(String.valueOf(scoreTitle)) / words.length) >= 0.5 ) {
-                AbstractSummary.about = AbstractSummary.about + " - " + line;
+                if (AbstractSummary.about.split("-").length < 2 ) {
+                    AbstractSummary.about = AbstractSummary.about + " - " + line;
+                }
                 needToRemove.add(line);
             }
             if((Double.parseDouble(String.valueOf(scoreParts)) / words.length) >= 0.5 ) {
@@ -212,6 +240,7 @@ public class ExtractSummary {
         lines = identifyTitle(lines);
         lines = removeRepeatsFromNotice(lines);
         lines = removeBrackets(lines);
+        lines = removeLines(lines);
         return lines;
     }
 
@@ -223,8 +252,12 @@ public class ExtractSummary {
 
         for (String line: lines) {
             int index = lines.indexOf(line);
-            line = line.replaceAll("\\(.*", "");
-            line = line.replaceAll(".*\\)", "");
+            if (line.contains("(") && line.contains(")")) {
+                line = line.replaceAll("\\(.*.\\)", "");
+            } else {
+                line = line.replaceAll("\\(.*", "");
+                line = line.replaceAll(".*\\)", "");
+            }
             lines.set(index, line);
         }
 
@@ -251,6 +284,32 @@ public class ExtractSummary {
         }
 
         return tempList;
+    }
+
+    public static List<String> findEndSentence(List<String> lines) {
+        int index = 0;
+        List<String> needToRemove = new ArrayList<>();
+        for (String line: lines) {
+            String[] words = line.split(" ");
+            String lastword = words[words.length-1];
+            if (KeyWords.closingKeywords.contains(lastword)) {
+                index = lines.indexOf(line);
+            }
+        }
+
+        //remove rest of lines
+        if (index == 0 || index == lines.size()-1) {
+            return lines;
+        }
+        for (int i = index+1; i < lines.size(); i++) {
+            needToRemove.add(lines.get(i));
+        }
+
+        for (int i = 0; i < needToRemove.size(); i++) {
+            lines.remove(lines.indexOf(needToRemove.get(i)));
+        }
+
+        return lines;
     }
 
 }

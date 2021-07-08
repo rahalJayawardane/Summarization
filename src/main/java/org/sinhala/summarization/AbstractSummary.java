@@ -30,8 +30,21 @@ public class AbstractSummary {
         part = ConvertToSinhala.formatValues(getCorrectLine(lines, KeyWords.sectionKeywords));
         about = getCorrectLine(lines, KeyWords.publicationKeywords);
         act = formatAct(lines, KeyWords.actKeywords);
-        who = selectedLineReverse(lines, KeyWords.whoKeywords);
+        who = formatPerson(selectedLineReverse(lines, KeyWords.whoKeywords));
         where = getWhere(lines, KeyWords.whereKeywords);
+    }
+
+    private static String formatPerson(String selectedLineReverse) {
+        String[] phases = selectedLineReverse.split("-");
+        String newWord = "";
+        for (String phase: phases) {
+            if (phase.trim().endsWith(",") || phase.trim().endsWith(".")) {
+                phase = phase.substring(0, phase.length()-1);
+            }
+            newWord = newWord + "-" + phase;
+        }
+
+        return newWord;
     }
 
     private static String formatNo(String text) {

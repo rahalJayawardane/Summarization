@@ -40,8 +40,8 @@ public class PDFReader {
 //        result.forEach(x -> files.add(""+ x));
 
 
-//        files.add("./SamplePDFs/2186-27_S.pdf");
-        files.add("./SamplePDFs/2184-12_S.pdf");
+        files.add("./SamplePDFs/2181-19_S.pdf");
+//        files.add("./SamplePDFs/2183-46_S.pdf");
 //        files.add("./SamplePDFs/2181-24_S.pdf");
 //        files.add("./SamplePDFs/2230-11_S.pdf");
 
@@ -93,9 +93,9 @@ public class PDFReader {
 
         document.close();
 
-        int total = Utils.countWords(lines);
-
         AbstractSummary.AssignValues(lines);
+
+        int total = Utils.countWords(lines);
 
         lines = ExtractSummary.filerNotice(lines);
         String firstSummary = Utils.joinLines(lines);
@@ -103,11 +103,14 @@ public class PDFReader {
         lines = ExtractSummary.removeRepeats(lines);
         String secondSummary = Utils.joinLines(lines);
 
+        lines = ExtractSummary.findEndSentence(lines);
+        String thirdSummary = Utils.joinLines(lines);
+
 
         String no = AbstractSummary.no;
         String date_desc = AbstractSummary.date_desc;
         String date = AbstractSummary.date;
-        String part = AbstractSummary.part;
+        String part = ConvertToSinhala.formatValues(AbstractSummary.part);
         String about = AbstractSummary.about;
         String act = AbstractSummary.act;
         String who = AbstractSummary.who;
@@ -126,7 +129,7 @@ public class PDFReader {
         System.out.println("Where: "+ where);
         System.out.println("Title: "+ title);
         System.out.println(KeyWords.gazetteKeywords);
-        System.out.println(lines);
+        System.out.println(thirdSummary);
         System.out.println("Total - " + total);
         System.out.println("Summary - " + summary);
         System.out.println("Ratio - " + ratio);

@@ -372,6 +372,7 @@ public class ConvertToSinhala {
         text = text.replace("è", "ධ්");
         text = text.replace("é", "ඬී");
         text = text.replace("ê", "ධි");
+        text = text.replace("Ê", "ජ්");
         text = text.replace("ë", "ධී");
         text = text.replace("ì", "බි");
         text = text.replace("í", "බ්");
@@ -490,9 +491,15 @@ public class ConvertToSinhala {
         text = text.replace("[", "ඤ");
         text = text.replace("§", "දී");
         text = text.replace("È", "දි");
-        text = text.replace("ð", "දි");
+        text = text.replace("ð", "ජි");
         text = text.replace("\"", ",");
         text = text.replace("¿", "ළු");
+        text = text.replace("C", "ක්");
+        text = text.replace("A", "න්");
+        text = text.replace("`", "");
+        text = text.replace("¡", "");
+        text = text.replaceAll("Ó","ථි");
+        text = text.replaceAll("Þ","දා");
         return text;
     }
 
@@ -504,6 +511,7 @@ public class ConvertToSinhala {
         value = value.replace("ඃ", "");
         value = value.replace("කොටසථ", "කොටස");
         value = value.replace("ජ්", "-");
+        value = value.replace("ථ", "");
         return value;
     }
 
@@ -588,6 +596,21 @@ public class ConvertToSinhala {
         text = text.replaceAll("Ɗ","ඩ්");
         text = text.replaceAll("ȿ","මු");
         text = text.replaceAll("ɢ","ල්");
+        text = text.replaceAll("Ź","ටි");
+        text = text.replaceAll("සංෙශʤධන","සංශෝධන");
+        text = text.replaceAll("නෙවʤත්පාදන","නවෝත්පාදන");
+        text = text.replaceAll("ʉ","සු");
+        text = text.replaceAll("Ľ","චි");
+        text = text.replaceAll("Ț","පු");
+        text = text.replaceAll("Ȫ","බි");
+        text = text.replaceAll("Ā","ක්\u200Dර");
+        text = text.replaceAll("ȩ","බ්");
+        text = text.replaceAll("ɉ","බු");
+//        text = text.replaceAll("ෙරʣ","රෝ");
+        text = text.replaceAll("ඟ=","ඟු");
+        text = text.replaceAll("ʣ","ා");
+        text = text.replaceAll("~","ඩු");
+        text = text.replaceAll("ʏ","හි");
         return text;
     }
 }

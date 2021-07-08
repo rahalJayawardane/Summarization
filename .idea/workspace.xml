@@ -5,15 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="62b3cf0b-1ae5-45a7-998c-f7d81bc24cd3" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/SampleRunner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/AbstractSummary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/AbstractSummary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/ConvertToSinhala.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/ConvertToSinhala.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/ExtractSummary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/ExtractSummary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/KeyWords.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/KeyWords.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/PDFReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sinhala/summarization/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pdfReader.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/AbstractSummary.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/AbstractSummary.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/ConvertToSinhala.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/ConvertToSinhala.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/ExtractSummary.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/ExtractSummary.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/KeyWords.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/KeyWords.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/PDFReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/PDFReader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/Utils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/sinhala/summarization/Utils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pdfReader.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -178,8 +185,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PDFReader" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="PDFReader" />
+    <configuration name="SampleRunner" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="SampleRunner" />
       <module name="pdfReader" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
@@ -230,17 +237,17 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.PDFReader" />
       <item itemvalue="Application.Server" />
       <item itemvalue="Application.test" />
       <item itemvalue="Application.DownloadPDF" />
       <item itemvalue="Application.PDFReader (1)" />
+      <item itemvalue="Application.SampleRunner" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.PDFReader (1)" />
+        <item itemvalue="Application.SampleRunner" />
         <item itemvalue="Application.test" />
-        <item itemvalue="Application.PDFReader" />
         <item itemvalue="Application.Server" />
         <item itemvalue="Application.DownloadPDF" />
       </list>
@@ -305,19 +312,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/PDFReader.java</url>
-          <line>130</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/PDFReader.java</url>
-          <line>398</line>
+          <url>file://$PROJECT_DIR$/src/main/java/SampleRunner.java</url>
+          <line>119</line>
           <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/PDFReader.java</url>
-          <line>397</line>
-          <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/sinhala/summarization/ServiceController.java</url>
@@ -326,8 +323,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/sinhala/summarization/ExtractSummary.java</url>
-          <line>225</line>
-          <option name="timeStamp" value="88" />
+          <line>83</line>
+          <option name="timeStamp" value="89" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/sinhala/summarization/ExtractSummary.java</url>
+          <line>307</line>
+          <option name="timeStamp" value="137" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
