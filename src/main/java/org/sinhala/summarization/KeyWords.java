@@ -27,14 +27,15 @@ public class KeyWords {
     public static List<String> alphabet = new ArrayList<String>(Arrays.asList("ඒ","බී","සී","ඩී","එෆ්","එල්","අයි","එම්"));
     public static String[] unWantedList = new String[20];
     public static List<String> removingKeywords = new ArrayList<String>(Arrays.asList(
-            "ප්\u200Dරජාතාන්ත්\u200Dරික සමාජවාදී ජනරජයේ",  "වන මම", "වන මා", "මා විසින්", "උපලේඛනයේ", "එනමුත්" ,"මා හට",
-            "එබැවින්", "එම", "වැනි යටතේ", "දින දරන", "වැනි"));
+            " ප්\u200Dරජාතාන්ත්\u200Dරික සමාජවාදී ජනරජයේ ",  " වන මම ", " වන මා ", " මා විසින් ", " උපලේඛනයේ ", " උපලේඛනය ", " මගින් ", " එනමුත් " ," මා හට ",
+            " එබැවින් ", " එම ", " වැනි යටතේ ", " දින දරන ", " වැනි ", " ගැනීමේ ", " හා ", " ේ "));
 
     public static List<String> gazetteKeywords = new ArrayList<>();
 
     public static List<String> closingKeywords = new ArrayList<String>(Arrays.asList(
             "කරමි.", "යුතුය.", "ලැබේ.", "ය.","හැක.", "දන්වමි.", "ලබයි.", "ඇත.", "යුතුයි.", "සිටිමි.", "දෙමි.", "තිබේ."));
 
+    public static List<String> unWantedRepeats =  new ArrayList<String>(Arrays.asList("මස"));
 
     private static void addDateKeywords() {
 

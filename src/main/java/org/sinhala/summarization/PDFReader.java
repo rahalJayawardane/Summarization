@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,8 @@ public class PDFReader {
 
         KeyWords.addKeywords();
 
+        long start = System.currentTimeMillis();
+
         List<String> files = new ArrayList<>();
         List<Path> result = new ArrayList<>();
         try (Stream<Path> paths = Files.walk(Paths.get("./SamplePDFs"))) {
@@ -37,10 +40,10 @@ public class PDFReader {
             e.printStackTrace();
         }
 
-//        result.forEach(x -> files.add(""+ x));
+        result.forEach(x -> files.add(""+ x));
 
 
-        files.add("./SamplePDFs/2181-19_S.pdf");
+//        files.add("./SamplePDFs/2181-19_S.pdf");
 //        files.add("./SamplePDFs/2183-46_S.pdf");
 //        files.add("./SamplePDFs/2181-24_S.pdf");
 //        files.add("./SamplePDFs/2230-11_S.pdf");
@@ -59,6 +62,9 @@ public class PDFReader {
             //System.out.println("------------------------------------------");
             i++;
         }
+
+        long time = System.currentTimeMillis() - start;
+        System.out.println("Time elapsed: "+ time/1000);
 
     }
 
@@ -106,6 +112,8 @@ public class PDFReader {
         lines = ExtractSummary.findEndSentence(lines);
         String thirdSummary = Utils.joinLines(lines);
 
+        String finalSummary = ExtractSummary.finalSummary(Utils.joinLines(lines));
+
 
         String no = AbstractSummary.no;
         String date_desc = AbstractSummary.date_desc;
@@ -116,7 +124,7 @@ public class PDFReader {
         String who = AbstractSummary.who;
         String where = AbstractSummary.where;
         String title = AbstractSummary.title;
-        int summary = Utils.countWords(lines);
+        int summary = Utils.countWords(finalSummary);
         double ratio = (double) summary/ (double) total;
 
         System.out.println("No: "+ no);
@@ -129,7 +137,7 @@ public class PDFReader {
         System.out.println("Where: "+ where);
         System.out.println("Title: "+ title);
         System.out.println(KeyWords.gazetteKeywords);
-        System.out.println(thirdSummary);
+        System.out.println(finalSummary);
         System.out.println("Total - " + total);
         System.out.println("Summary - " + summary);
         System.out.println("Ratio - " + ratio);

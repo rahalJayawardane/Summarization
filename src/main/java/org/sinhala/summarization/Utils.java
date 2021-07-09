@@ -29,6 +29,10 @@ public class Utils {
         return count;
     }
 
+    public static int countWords(String text) {
+        return text.split(" ").length;
+    }
+
     public static String joinLines(List<String> lines) {
         String sentence = "";
         for (String line: lines) {

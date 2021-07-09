@@ -114,6 +114,21 @@ public class test {
 
         System.out.println(g.contains("යූ"));
 
+        String dd = "bvï w;alr .ekSfï mkf;a 38 jeks j.ka;sh ^w& w;=re úOdkh\n" +
+                "hgf;a mkjk ,oaodjQ o\" wxl 2084$06 yd 2018'08'14 jeks Èk ork\n" +
+                "w;s úfYI .eiÜ m;%fha m<lrk ,oaodjQ o\" 2018 wxl 193 yd 2018'06'20\n" +
+                "jeks Èk ork wd{dfõ iúia;rj oelafjk bvï fldgi\n" +
+                "Y%S ,xld m%cd;dka;%sl iudcjd§ ckrch fj; mejÍ ;sfí' tkuq;a\n" +
+                "tu bvï fldgfia N=la;sh Y%S ,xld m%cd;dka;%sl iudcjd§ ckrch\n" +
+                "fjkqfjka ;ju Ndrf.k ke;' tneúka\" bvï yd bvï ixj¾Ok\n" +
+                "wud;H\" iurfldaka uqÈhkafia,df.a pkaøfiak jk uu\" bvï w;alr\n" +
+                ".ekSfï mkf;a 39^1& jeks j.ka;sh hgf;a ud yg mejÍ we;s n,;,\n" +
+                "wkqj wxl 2084$06 yd 2018'08'14 jeks Èk ork w;s úfYI .eiÜ\n" +
+                "m;%fha m<lrk ,o by; i|yka 2018 wxl 193 yd 2018'06'20 jeks Èk\n" +
+                "ork wd{dj fuu kshuh u.ska m%;HdÈIaG lrñ";
+
+        System.out.println(dd.split(" ").length);
+
     }
 
 

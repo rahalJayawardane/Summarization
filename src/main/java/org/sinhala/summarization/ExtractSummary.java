@@ -1,18 +1,10 @@
 package org.sinhala.summarization;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -57,7 +49,7 @@ public class ExtractSummary {
         List<String> newLines = new ArrayList<>();
         for (String line: lines) {
             for (String removeWord: KeyWords.removingKeywords) {
-                line = line.replaceAll(removeWord, "");
+                line = line.replaceAll(removeWord, " ");
             }
             String newLine = "";
             for (String words : line.split(",")) {
@@ -66,7 +58,7 @@ public class ExtractSummary {
                 }
             }
 
-            if (newLine.split(" ").length > 4) {
+            if (newLine.split(" ").length >= 4) {
                 newLines.add(newLine);
             }
         }
@@ -91,7 +83,7 @@ public class ExtractSummary {
             int index = lines.indexOf(line);
             line = clearStrings(line);
             for (String removeWord: KeyWords.removingKeywords) {
-                line = line.replaceAll(removeWord, "");
+                line = line.replaceAll(removeWord, " ");
             }
             if (AbstractSummary.who.length() > 0) {
                 line = checkAndReplace(AbstractSummary.who, line);
@@ -130,8 +122,8 @@ public class ExtractSummary {
             if(selectedWord.trim().length() < 2) {
                 continue;
             }
-            line = line.replaceAll(selectedWord, " ");
-            line = line.replaceAll(selectedWord.replaceAll("\\p{Punct}","").trim(), " ");
+            line = line.replaceAll(Pattern.quote(selectedWord), " ");
+            line = line.replaceAll(Pattern.quote(selectedWord.replaceAll("\\p{Punct}","").trim()), " ");
 
             List<String> selectedWordPhase = new ArrayList<>(Arrays.asList(selectedWord.trim().toLowerCase().split("\\s+")));
             List<String> lineWordPhase = new ArrayList<>(Arrays.asList(line.toLowerCase().split("\\s+")));
@@ -222,7 +214,7 @@ public class ExtractSummary {
             if (repeatingWords.containsKey(i)) {
                 String word = repeatingWords.get(i);
                 for (int j = i+1; j< words.length; j++) {
-                    if (!repeatingWords.containsKey(j)) {
+                    if (!repeatingWords.containsKey(j) || repeatingWords.get(j).length() == 0) {
                         if (word.split(" ").length >= 2) {
                             repeatedPhases.add(Utils.removePunt(word));
                         }
@@ -258,8 +250,13 @@ public class ExtractSummary {
                 line = line.replaceAll("\\(.*", "");
                 line = line.replaceAll(".*\\)", "");
             }
-            lines.set(index, line);
+            if (line.replaceAll("\\s+", " ").split(" ").length <= 3) {
+                lines.set(index, "");
+            } else {
+                lines.set(index, line);
+            }
         }
+
 
         return lines;
     }
@@ -269,7 +266,15 @@ public class ExtractSummary {
         for (String line: lines) {
             int index = lines.indexOf(line);
             for (String keyword: KeyWords.gazetteKeywords) {
-                line = line.replaceAll(Utils.removePunt(keyword), "");
+                if (line.split(" ").length - keyword.split(" ").length > 2) {
+                    for (String word: KeyWords.unWantedRepeats) {
+                        if (keyword.contains(word)) {
+                            line = line.replaceAll(Utils.removePunt(keyword), "");
+                        }
+                    }
+                } else {
+                    line = line.replaceAll(Pattern.quote(keyword), "");
+                }
             }
             lines.set(index, line.trim());
         }
@@ -310,6 +315,93 @@ public class ExtractSummary {
         }
 
         return lines;
+    }
+
+    public static String finalSummary(String text) {
+
+        text = removeUnwanted(text);
+        for (String words: KeyWords.removingKeywords) {
+            text = text.replaceAll(words, " ");
+            text = text.replaceAll("  ", " ");
+        }
+        return text;
+    }
+
+    private static String removeUnwanted(String text) {
+        String newText = "";
+        String[] words = text.split(" ");
+        for (int i = 0; i < words.length; i++) {
+            //dates
+            if (words[i].matches("^\\d{4}.\\d{2}.\\d{2}")) {
+                words[i] = "";
+            }
+            //acts --> xxxx අංක xx
+            if (words[i].matches("^\\d{4}")) {
+                if (i != words.length-1 && words[i+1].matches("අංක") && words[i+2].matches("^\\d+")) {
+                    words[i] = "";
+                    words[i+1] = "";
+                    words[i+2] = "";
+                }
+            }
+
+            //acts --> xxxx/xx
+            if (words[i].matches("^\\d{4}/\\d+")) {
+                words[i] = "";
+            }
+
+            //decimals
+            if (words[i].matches("^\\d+\\.\\d+")) {
+                words[i] = "";
+            }
+
+            newText = newText + " " + words[i];
+
+        }
+
+        return newText;
+    }
+
+    private static List<String> findRepeats(String text) {
+
+        int count;
+        HashMap<Integer, String> repeatingWords = new HashMap<>();
+        List<String> repeatedPhases = new ArrayList<>();
+        String words[] = text.split(" ");
+
+        for(int i = 0; i < words.length; i++) {
+            count = 1;
+            for(int j = i+1; j < words.length; j++) {
+                if(Utils.removePunt(words[i]).equals(Utils.removePunt(words[j]))) {
+                    count++;
+                    words[j] = "0";
+                }
+            }
+
+            if(count > 1 && words[i] != "0") {
+                String word = Utils.removePunt(words[i]);
+                repeatingWords.put(i, word);
+            }
+        }
+
+        for (int i = 0; i < words.length; i++) {
+            if (repeatingWords.containsKey(i)) {
+                String word = repeatingWords.get(i);
+                for (int j = i+1; j< words.length; j++) {
+                    if (!repeatingWords.containsKey(j) || repeatingWords.get(j).length() == 0) {
+                        if (word.split(" ").length >= 2) {
+                            repeatedPhases.add(Utils.removePunt(word));
+                        }
+                        i = j;
+                        break;
+                    } else {
+                        word = word + " " + repeatingWords.get(j);
+                    }
+                }
+            }
+
+        }
+
+        return repeatedPhases;
     }
 
 }

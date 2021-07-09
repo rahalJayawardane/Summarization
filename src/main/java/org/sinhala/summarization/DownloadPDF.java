@@ -68,15 +68,26 @@ public class DownloadPDF {
 
 
     private static void test() throws IOException {
-        String URL = "http://documents.gov.lk/files/egz/2020/7/";
-        Document doc = Jsoup.connect(URL).get();
-        for (Element file : doc.select("td a")) {
-            String fileName = file.attr("href");
-            if(fileName.endsWith("_S.pdf")) {
-                System.out.println(fileName);
-                download(URL+fileName);
-                //check("./SamplePDFs/fileName");
+        int year = 2020;
+        int month =11;
+
+        for (int i =0 ; i <=8; i ++) {
+            String URL = "http://documents.gov.lk/files/egz/"+year+"/"+month+"/";
+            Document doc = Jsoup.connect(URL).get();
+            for (Element file : doc.select("td a")) {
+                String fileName = file.attr("href");
+                if(fileName.endsWith("_S.pdf")) {
+                    System.out.println(fileName);
+                    download(URL+fileName);
+                    //check("./SamplePDFs/fileName");
+                }
+            }
+            month++;
+            if (month == 13) {
+                month = 1;
+                year++;
             }
         }
+
     }
 }

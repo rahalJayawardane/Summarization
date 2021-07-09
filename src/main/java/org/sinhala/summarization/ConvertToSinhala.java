@@ -500,6 +500,7 @@ public class ConvertToSinhala {
         text = text.replace("¡", "");
         text = text.replaceAll("Ó","ථි");
         text = text.replaceAll("Þ","දා");
+        text = text.replaceAll("×","ඥා");
         return text;
     }
 
