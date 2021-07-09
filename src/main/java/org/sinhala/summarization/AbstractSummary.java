@@ -24,14 +24,15 @@ public class AbstractSummary {
 
 
     public static void AssignValues(List<String> lines) {
-        no = formatNo(getCorrectLine(lines, new ArrayList<String>(Arrays.asList("අංක"))));
-        date_desc = getCorrectLine(lines, KeyWords.datesKeywords);
+        no = formatNo(getCorrectLineForAct(lines, new ArrayList<String>(Arrays.asList("අංක"))));
+        date_desc = getCorrectLineForDate(lines, KeyWords.datesKeywords);
         date = getDate(lines);
         part = ConvertToSinhala.formatValues(getCorrectLine(lines, KeyWords.sectionKeywords));
         about = getCorrectLine(lines, KeyWords.publicationKeywords);
         act = formatAct(lines, KeyWords.actKeywords);
         who = formatPerson(selectedLineReverse(lines, KeyWords.whoKeywords));
         where = getWhere(lines, KeyWords.whereKeywords);
+        setTitle(lines);
     }
 
     private static String formatPerson(String selectedLineReverse) {
@@ -49,7 +50,12 @@ public class AbstractSummary {
 
     private static String formatNo(String text) {
         if(text.split(" ").length > 2) {
-            return "අංක" + " " + text.split("අංක")[1];
+            String actNo = text.split("අංක")[1];
+            String postString = "";
+            if (actNo.split("\\d+\\/\\d+").length > 1) {
+                postString = actNo.split("\\d+\\/\\d+")[1];
+            }
+            return "අංක" + " " + actNo.replaceAll(postString, "");
         }
         return text;
     }
@@ -66,6 +72,38 @@ public class AbstractSummary {
 
     private static String getCorrectLine(List<String> lines, List<String> keywords) {
         String lineWord = "";
+        for (String line:lines) {
+            String[] words = line.split(" ");
+            for(String word: words) {
+                if(keywords.contains(word)) {
+                    return Utils.getValue(lines, line);
+                }
+            }
+        }
+        return lineWord;
+    }
+
+    private static String getCorrectLineForDate(List<String> lines, List<String> keywords) {
+        String lineWord = "";
+        for (String line:lines) {
+            String[] words = line.split(" ");
+            for(String word: words) {
+                if(keywords.contains(word) && words.length <= 6) {
+                    return Utils.getValue(lines, line);
+                }
+            }
+        }
+        return lineWord;
+    }
+
+    private static String getCorrectLineForAct(List<String> lines, List<String> keywords) {
+        String lineWord = "";
+        for (String line:lines) {
+            boolean actLine = line.contains("අංක");
+            if (actLine && line.split(" ").length == 2) {
+                return Utils.getValue(lines, line);
+            }
+        }
         for (String line:lines) {
             String[] words = line.split(" ");
             for(String word: words) {
@@ -131,7 +169,11 @@ public class AbstractSummary {
             String lastWord = words[words.length-1].replaceAll("\\p{Punct}", "");
             for(String word: words) {
                 if(keywords.contains(word) || ("අංක".equals(word))) {
-                    tempWord = Utils.getValue(lines, line);
+                    if (line.endsWith("දරන")) {
+                        tempWord = line.substring(line.indexOf("අංක"),line.indexOf("දරන"));
+                    } else {
+                        tempWord = Utils.getValue(lines, line);
+                    }
                     break outerloop;
                 }
             }
@@ -154,6 +196,8 @@ public class AbstractSummary {
                 lineWord = lineWord + " " + words[i];
             }
         }
+
+
         return lineWord;
     }
 
@@ -207,9 +251,24 @@ public class AbstractSummary {
             String line = lines.get(i);
             String[] selecteLineWords = line.split("[ /]");
             String lastword = selecteLineWords[selecteLineWords.length-1];
+            if (lastword.contains("වැ.බ.")) {
+                int index = 2;
+                if (selecteLineWords[selecteLineWords.length-index].equals("(")) {
+                    index++;
+                }
+                lastword = selecteLineWords[selecteLineWords.length-index] +".";
+            }
             if(lastword.matches(".*\\p{Punct}") || lastword.endsWith("ල")) {
                 lastword = lastword.replace(".", "");
                 lastword = lastword.replace(",", "");
+                if (lastword.endsWith("ල")) {
+                    lastword = lastword.substring(0, lastword.length()-1);
+                }
+                if(keywords.contains(lastword)) {
+                    String position = Utils.getValue(lines, lines.get(i));
+                    return getNameOfIssuer(lines, i) + " - " + position;
+                }
+            } else {
                 if(keywords.contains(lastword)) {
                     String position = Utils.getValue(lines, lines.get(i));
                     return getNameOfIssuer(lines, i) + " - " + position;
@@ -261,5 +320,28 @@ public class AbstractSummary {
             return lines.get(key);
         }
         return "";
+    }
+
+    public static void fillDetails() {
+        if (AbstractSummary.where == "") {
+            if (AbstractSummary.who.contains("මුදල්") && AbstractSummary.who.contains("අමාත්\u200Dය")) {
+                AbstractSummary.where = "මුදල් අමාත්\u200Dයාංශය, කොළඹ 01.";
+            }
+        }
+    }
+
+    private static void setTitle(List<String> lines) {
+        String orgLine = "";
+        AbstractSummary.title = "";
+        for (String line: lines) {
+            String[] words = line.split(" ");
+            String lastWord = words[words.length-1];
+            if (KeyWords.titleKeywords.contains(lastWord)) {
+                orgLine = line;
+                line = line.replaceAll("\\s+"," ");
+                AbstractSummary.title = line;
+            }
+        }
+        lines.remove(orgLine);
     }
 }

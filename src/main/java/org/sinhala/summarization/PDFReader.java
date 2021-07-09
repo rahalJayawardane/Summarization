@@ -43,7 +43,9 @@ public class PDFReader {
         result.forEach(x -> files.add(""+ x));
 
 
-//        files.add("./SamplePDFs/2181-19_S.pdf");
+//        files.add("./SamplePDFs/2194-06_S.pdf");
+//        files.add("./SamplePDFs/2209-75_S.pdf");
+//        files.add("./SamplePDFs/2205-04_S.pdf");
 //        files.add("./SamplePDFs/2183-46_S.pdf");
 //        files.add("./SamplePDFs/2181-24_S.pdf");
 //        files.add("./SamplePDFs/2230-11_S.pdf");
@@ -92,8 +94,14 @@ public class PDFReader {
             if(text.contains("ɼ")) {
                 text = ConvertToSinhala.correctUnicode(text);
             }
-            text = ConvertToSinhala.convertText(text);
-            lines = remove(text);
+            text = clear(text);
+            if (!text.contains("ශී ලංකා")) {
+                text = ConvertToSinhala.convertText(text);
+                lines = remove(text);
+            } else {
+                lines = removeSinhala(text);
+            }
+
             lines = format(lines);
         }
 
@@ -113,6 +121,7 @@ public class PDFReader {
         String thirdSummary = Utils.joinLines(lines);
 
         String finalSummary = ExtractSummary.finalSummary(Utils.joinLines(lines));
+        AbstractSummary.fillDetails();
 
 
         String no = AbstractSummary.no;
@@ -157,10 +166,43 @@ public class PDFReader {
         response.put("Acts", act);
         response.put("Who", who);
         response.put("Where", where);
+        response.put("Title", title);
+        response.put("NoticeWordCount", total);
+        response.put("SummaryCount", total);
+        response.put("Ratio", String.format("%.2f",ratio));
+        response.put("FinalOutput", finalSummary);
         response.put("others", lines);
 
         return response;
 
+    }
+
+    private static List<String> removeSinhala(String text) {
+        List<String> lines = new ArrayList<>();
+        for (String line: text.split("\n")) {
+            if (!KeyWords.unWantedSinhalaLines.contains(line.trim())) {
+                if (line.contains("නිෙව්දන")) {
+                    line = line.replaceAll("නිෙව්දන","නිවේදන");
+                }
+                lines.add(line);
+            }
+
+        }
+        return lines;
+    }
+
+    private static String clear(String text) {
+        String[] words = text.split(" ");
+        String newWord = "";
+        for (String word: words) {
+            if (word.equals("a") || word.equals("s") || word.equals("=") || word.equals("sa")) {
+                word = "";
+            }
+            newWord = newWord + " " + word;
+        }
+        text = newWord.trim();
+        text = text.replaceAll("  ", " ");
+        return text;
     }
 
     private static void WritetoFile(String line) {
@@ -251,7 +293,6 @@ public class PDFReader {
                         }
                     }
                 }
-
                 if((hasEnglish && hasNumbers) || hasUnwantedChar || hasEnglish) {
                     text = "";
                 }
@@ -280,7 +321,11 @@ public class PDFReader {
     private static List<String> format(List<String> text) {
 
         List<String> lines = new ArrayList<String>();
+
         for (int i = 0; i < text.size(); i++) {
+            if (text.get(i).contains("අංක - ")) {
+                text.set(i, text.get(i).replace("අංක - ", "අංක "));
+            }
             if(!text.get(i).contains("වැනි කොටස")){
                 String[] tokenized = text.get(i).trim().split("-| ජ් ");
                 for (int j = 0; j < tokenized.length; j++) {

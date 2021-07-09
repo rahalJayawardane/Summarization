@@ -65,19 +65,6 @@ public class ExtractSummary {
         return newLines;
     }
 
-    private static List<String> identifyTitle(List<String> lines) {
-        AbstractSummary.title = "";
-        for (String line: lines) {
-            if (line.replaceAll("\\p{Punct}","").endsWith("පිරවීම")) {
-                AbstractSummary.title = line;
-            }
-        }
-        if (AbstractSummary.title != "") {
-            lines.remove(lines.indexOf(AbstractSummary.title));
-        }
-        return lines;
-    }
-
     private static List<String> cleanNotice(List<String> lines) {
         for (String line: lines) {
             int index = lines.indexOf(line);
@@ -102,7 +89,7 @@ public class ExtractSummary {
 
     private static String clearStrings(String line) {
         for (String word: line.split(" ")) {
-            if(word.length() <= 2) {
+            if(word.length() == 2) {
                  switch (word) {
                      case "ේ":
                          line = line.replace("ේ","");
@@ -111,6 +98,8 @@ public class ExtractSummary {
                          line = line.replace("ඃ","");
                          break;
                  }
+            } else if (word.length() == 1 && word.equals("අ")) {
+                line = line.replace(" අ "," ");
             }
         }
         return line.trim();
@@ -229,7 +218,6 @@ public class ExtractSummary {
         }
 
         KeyWords.gazetteKeywords = repeatedPhases;
-        lines = identifyTitle(lines);
         lines = removeRepeatsFromNotice(lines);
         lines = removeBrackets(lines);
         lines = removeLines(lines);
@@ -320,11 +308,26 @@ public class ExtractSummary {
     public static String finalSummary(String text) {
 
         text = removeUnwanted(text);
+        text = removeIfSo(text);
         for (String words: KeyWords.removingKeywords) {
             text = text.replaceAll(words, " ");
             text = text.replaceAll("  ", " ");
         }
         return text;
+    }
+
+    private static String removeIfSo(String text) {
+        List<String> newLines = new ArrayList<>();
+        String[] lines = text.split("හෙයින් ද ¦");
+        int count = lines.length;
+        if(count > 1) {
+            newLines.add(lines[0] + " හෙයින්, ");
+            newLines.add(lines[count-1]);
+        } else {
+            newLines.add(lines[0]);
+        }
+
+        return Utils.joinLines(newLines);
     }
 
     private static String removeUnwanted(String text) {
@@ -350,11 +353,15 @@ public class ExtractSummary {
             }
 
             //decimals
-            if (words[i].matches("^\\d+\\.\\d+")) {
-                words[i] = "";
-            }
+//            if (words[i].matches("^\\d+\\.\\d+")) {
+//                words[i] = "";
+//            }
 
-            newText = newText + " " + words[i];
+            if (newText.length() == 0) {
+                newText = words[i];
+            } else {
+                newText = newText + " " + words[i];
+            }
 
         }
 

@@ -501,6 +501,7 @@ public class ConvertToSinhala {
         text = text.replaceAll("Ó","ථි");
         text = text.replaceAll("Þ","දා");
         text = text.replaceAll("×","ඥා");
+        text = text.replaceAll("¥","දූ");
         return text;
     }
 
@@ -612,6 +613,8 @@ public class ConvertToSinhala {
         text = text.replaceAll("ʣ","ා");
         text = text.replaceAll("~","ඩු");
         text = text.replaceAll("ʏ","හි");
+        text = text.replaceAll("ý","කු");
+        text = text.replaceAll("අෙප්‍රʢල්","අප්‍රේල්");
         return text;
     }
 }

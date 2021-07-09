@@ -36,11 +36,18 @@ public class Utils {
     public static String joinLines(List<String> lines) {
         String sentence = "";
         for (String line: lines) {
+            if (line.startsWith(" ")) {
+                line = line.substring(1, line.length());
+            }
             line = line.replaceAll("  ", " ");
             if(line.startsWith(" ")) {
                 line = line.substring(1, line.length()-1);
             }
-            sentence = sentence + " " + line;
+            if (sentence.length() == 0) {
+                sentence = line;
+            } else {
+                sentence = sentence + " " + line;
+            }
         }
         return sentence.trim();
     }
