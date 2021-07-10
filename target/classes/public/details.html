@@ -131,10 +131,6 @@
             </tr>
             <tr>
             <tr>
-                <td>Title: </td>
-                <td><input style="float:left" type="text" id="title" value="" readonly="true" size="100"></td>
-            </tr>
-            <tr>
                 <td>Section: </td>
                 <td><input style="float:left" type="text" id="section" value="" readonly="true" size="70"></td>
             </tr>
@@ -145,15 +141,23 @@
                 </td>
             </tr>
             <tr>
-                <td>Who: </td>
+                <td>Issued Person: </td>
                 <td><input style="float:left" type="text" id="who" value="" readonly="true" size="80"></td>
             </tr>
             <tr>
-                <td>Where: </td>
+                <td>Issued Department: </td>
                 <td><input style="float:left" type="text" id="where" value="" readonly="true" size="100"></td>
             </tr>
             <tr>
-                <td>others: </td>
+                <td>Title: </td>
+                <td><input style="float:left" type="text" id="title" value="" readonly="true" size="100"></td>
+            </tr>
+            <tr>
+                <td>Sub Title: </td>
+                <td><input style="float:left" type="text" id="subTitle" value="" readonly="true" size="100"></td>
+            </tr>
+            <tr>
+                <td>Notice: </td>
                 <td>
                     <textarea id="other" style="float:left" rows="10" cols="130" readonly="true" > </textarea>
                 </td>
@@ -164,6 +168,21 @@
             <input type="hidden" id="pdf" value="">
             <a class="btn btn-sm btn-success" href="javascript:getPDF()" role="button">View PDF</a>
         </p>
+
+        <center>
+            <table>
+                <tr>
+                    <td>Original no of Words: </td>
+                    <td>Summary no of Words: </td>
+                    <td>Ratio: </td>
+                </tr>
+                <tr>
+                    <td><input style="float:left" type="text" id="original" value="" readonly="true" size="20"></td>
+                    <td><input style="float:left" type="text" id="summary" value="" readonly="true" size="20"></td>
+                    <td><input style="float:left" type="text" id="ratio" value="" readonly="true" size="20"></td>
+                </tr>
+            </table>
+        </center>
 
     </div>
 
@@ -187,6 +206,10 @@
                 $('#where').val(data.Where);
                 $('#other').val(data.FinalOutput);
                 $('#pdf').val(file);
+                $('#subTitle').val(data.Title);
+                $('#original').val(data.NoticeWordCount);
+                $('#summary').val(data.SummaryCount);
+                $('#ratio').val(data.Ratio);
             });
         });
 

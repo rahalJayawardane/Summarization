@@ -2,7 +2,9 @@ package org.sinhala.summarization;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -61,9 +63,24 @@ public class Utils {
         return word;
     }
 
-    public static String formatSection(String value) {
+    public static String formatSection(String values) {
 
-        String noDuplicates = Arrays.asList(value.split("-")).stream().distinct().collect(Collectors.joining());
+        String noDuplicates = "";
+        Iterator<String> itObjectForList =Arrays.asList(values.split("-")).iterator();
+        while (itObjectForList.hasNext()) {
+            if(noDuplicates.length() == 0) {
+                noDuplicates =  itObjectForList.next();
+            } else {
+                noDuplicates = noDuplicates + "," + itObjectForList.next();
+            }
+        }
         return noDuplicates;
+    }
+
+    public static String formatValues(String text) {
+        if (text.startsWith(" ")) {
+            text = text.substring(1, text.length());
+        }
+        return text.replaceAll("-", "");
     }
 }

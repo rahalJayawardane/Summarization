@@ -287,6 +287,7 @@ public class ExtractSummary {
             String lastword = words[words.length-1];
             if (KeyWords.closingKeywords.contains(lastword)) {
                 index = lines.indexOf(line);
+                break;
             }
         }
 

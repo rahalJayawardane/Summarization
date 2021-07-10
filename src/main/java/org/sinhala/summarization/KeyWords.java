@@ -70,7 +70,7 @@ public class KeyWords {
                 "අනුරාධපුර","බදූල්ල", "වත්තල","රත්නපුර","කළුතර", "අමාත්\u200Dයාංශය",
                 "දිස්ති්\u200Dරක්කය","දිස්ත්\u200Dරික්කය"));
 
-        titleKeywords= new ArrayList<String>(Arrays.asList("පිරවීම", "දර්ශකය්","දර්ශකය"));
+        titleKeywords= new ArrayList<String>(Arrays.asList("පිරවීම", "දර්ශකය්","දර්ශකය","දැන්වීමයි","දැන්වීම"));
         sectionKeywords.addAll(actKeywords);
 
         addDateKeywords();

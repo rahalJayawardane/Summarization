@@ -40,10 +40,10 @@ public class PDFReader {
             e.printStackTrace();
         }
 
-        result.forEach(x -> files.add(""+ x));
+//        result.forEach(x -> files.add(""+ x));
 
 
-//        files.add("./SamplePDFs/2194-06_S.pdf");
+        files.add("./SamplePDFs/2233-13_S.pdf");
 //        files.add("./SamplePDFs/2209-75_S.pdf");
 //        files.add("./SamplePDFs/2205-04_S.pdf");
 //        files.add("./SamplePDFs/2183-46_S.pdf");
@@ -127,11 +127,11 @@ public class PDFReader {
         String no = AbstractSummary.no;
         String date_desc = AbstractSummary.date_desc;
         String date = AbstractSummary.date;
-        String part = ConvertToSinhala.formatValues(AbstractSummary.part);
+        String part = Utils.formatSection(ConvertToSinhala.formatValues(AbstractSummary.part));
         String about = AbstractSummary.about;
         String act = AbstractSummary.act;
-        String who = AbstractSummary.who;
-        String where = AbstractSummary.where;
+        String who = Utils.formatValues(AbstractSummary.who);
+        String where = Utils.formatValues(AbstractSummary.where);
         String title = AbstractSummary.title;
         int summary = Utils.countWords(finalSummary);
         double ratio = (double) summary/ (double) total;
@@ -168,7 +168,7 @@ public class PDFReader {
         response.put("Where", where);
         response.put("Title", title);
         response.put("NoticeWordCount", total);
-        response.put("SummaryCount", total);
+        response.put("SummaryCount", summary);
         response.put("Ratio", String.format("%.2f",ratio));
         response.put("FinalOutput", finalSummary);
         response.put("others", lines);
