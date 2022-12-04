@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+          integrity="undefined" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Sinhala Gazette Summarization</title>
+
+    <!-- Bootstrap core CSS -->
+    <style>
+      /* Space out content a bit */
+            body {
+              padding-top: 20px;
+              padding-bottom: 20px;
+            }
+
+            /* Everything but the jumbotron gets side spacing for mobile first views */
+            .header,
+            .marketing,
+            .footer {
+              padding-right: 15px;
+              padding-left: 15px;
+            }
+
+            /* Custom page header */
+            .header {
+              padding-bottom: 20px;
+              border-bottom: 1px solid #e5e5e5;
+            }
+            /* Make the masthead heading the same height as the navigation */
+            .header h3 {
+              margin-top: 0;
+              margin-bottom: 0;
+              line-height: 40px;
+            }
+
+            /* Custom page footer */
+            .footer {
+              padding-top: 19px;
+              color: #777;
+              border-top: 1px solid #e5e5e5;
+            }
+
+            /* Customize container */
+            @media (min-width: 768px) {
+              .container {
+                /*max-width: 730px;*/
+              }
+            }
+            .container-narrow > hr {
+              margin: 30px 0;
+            }
+
+            /* Main marketing message and sign up button */
+            .jumbotron {
+              text-align: center;
+              border-bottom: 1px solid #e5e5e5;
+            }
+            .jumbotron .btn {
+              padding: 14px 24px;
+              font-size: 21px;
+            }
+
+            /* Supporting marketing content */
+            .marketing {
+              margin: 40px 0;
+            }
+            .marketing p + h4 {
+              margin-top: 28px;
+            }
+
+            /* Responsive: Portrait tablets and up */
+            @media screen and (min-width: 768px) {
+              /* Remove the padding we set earlier */
+              .header,
+              .marketing,
+              .footer {
+                padding-right: 0;
+                padding-left: 0;
+              }
+              /* Space out the masthead */
+              .header {
+                margin-bottom: 30px;
+              }
+              /* Remove the bottom border on the jumbotron for visual effect */
+              .jumbotron {
+                border-bottom: 0;
+              }
+            }
+
+             /* RD: making vertical align great again */
+            .table > tbody > tr > td {
+                 vertical-align: middle;
+            }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="header clearfix">
+        <nav>
+            <ul class="nav nav-pills" style="float: right;">
+                <li class="nav-item">
+                    <a class="btn btn-lg btn-default" href="index.html">URL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-lg btn-default" href="select.html">Selection</a>
+                </li>
+            </ul>
+        </nav>
+        <h3 class="text-muted">Sinhala Gazette Summarization</h3>
+    </div>
+
+    <div class="jumbotron" style="background-color:#E9ECEF">
+
+        <p class="lead"></p>
+        <form style="">
+            <div class="form-group"><label style="text-align:left;font-size: 25px;">
+                Gazette Details</label>
+                <p>
+                <table>
+                    <tr>
+                        <td>No:</td>
+                        <td><input style="float:left" type="text" id="no" value="" readonly="true" size="30"></td>
+                    </tr>
+                    <tr>
+                    <tr>
+                        <td>Date:</td>
+                        <td><input style="float:left" type="text" id="date" value="" readonly="true" size="50"></td>
+                    </tr>
+                    <tr>
+                    <tr>
+                        <td>Section:</td>
+                        <td><input style="float:left" type="text" id="section" value="" readonly="true" size="70"></td>
+                    </tr>
+                    <tr>
+                        <td>Acts:</td>
+                        <td>
+                            <textarea id="acts" style="float:left" rows="2" cols="130" readonly="true"> </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Issued Person:</td>
+                        <td><input style="float:left" type="text" id="who" value="" readonly="true" size="80"></td>
+                    </tr>
+                    <tr>
+                        <td>Issued Department:</td>
+                        <td><input style="float:left" type="text" id="where" value="" readonly="true" size="100"></td>
+                    </tr>
+                    <tr>
+                        <td>Title:</td>
+                        <td><input style="float:left" type="text" id="title" value="" readonly="true" size="100"></td>
+                    </tr>
+                    <tr>
+                        <td>Sub Title:</td>
+                        <td><input style="float:left" type="text" id="subTitle" value="" readonly="true" size="100">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Notice:</td>
+                        <td>
+                            <textarea id="other" style="float:left" rows="10" cols="130" readonly="true"> </textarea>
+                        </td>
+                    </tr>
+                </table>
+                </p>
+                <p>
+                    <input type="hidden" id="pdf" value="">
+                    <a class="btn btn-sm btn-success" href="javascript:getPDF()" role="button">View PDF</a>
+                </p>
+
+                <center>
+                    <table>
+                        <tr>
+                            <td>Original no of Words:</td>
+                            <td>Summary no of Words:</td>
+                            <td>Ratio:</td>
+                        </tr>
+                        <tr>
+                            <td><input style="float:left" type="text" id="original" value="" readonly="true" size="20">
+                            </td>
+                            <td><input style="float:left" type="text" id="summary" value="" readonly="true" size="20">
+                            </td>
+                            <td><input style="float:left" type="text" id="ratio" value="" readonly="true" size="20">
+                            </td>
+                        </tr>
+                    </table>
+                </center>
+
+            </div>
+
+            <footer class="footer">
+                <p>© 2021</p>
+            </footer>
+
+    </div> <!-- /container -->
+
+    <script>
+        $( document ).ready(function() {
+            var file = getUrlParameter('file');
+            var url = "http://localhost:8080/file?fileId="+file;
+            $.get( url, function( data ) {
+                $('#no').val(data.No);
+                $('#date').val(data.Date_in_details);
+                $('#title').val(data.About);
+                $('#section').val(data.Sections);
+                $('#acts').val(data.Acts);
+                $('#who').val(data.Who);
+                $('#where').val(data.Where);
+                $('#other').val(data.FinalOutput);
+                $('#pdf').val(file);
+                $('#subTitle').val(data.Title);
+                $('#original').val(data.NoticeWordCount);
+                $('#summary').val(data.SummaryCount);
+                $('#ratio').val(data.Ratio);
+            });
+        });
+
+        function getPDF() {
+            var file = $('#pdf').val();
+            window.open("http://localhost:8080/getpdf?file="+file);
+        }
+
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = window.location.search.substring(1),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return typeof sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                }
+            }
+            return false;
+        };
+
+
+    </script>
+
+
+</body>
+</html>
